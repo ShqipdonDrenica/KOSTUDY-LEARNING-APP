@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "616996984591",
+    "project_id": "fir-getx-app-dbf4e",
+    "storage_bucket": "fir-getx-app-dbf4e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:616996984591:android:7f14d26b40c301e0bed07a",
+        "android_client_info": {
+          "package_name": "com.example.flutter_study_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "616996984591-81lvmrl7o7s9jmikh98jg8gk6v5ic54g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzyE4use4K5d-SPh0DcsG5cXAUDzC763Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "616996984591-81lvmrl7o7s9jmikh98jg8gk6v5ic54g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "616996984591-ns7dgv3qp2p41nnm4a8tib2r182dmp31.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterStudyApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
