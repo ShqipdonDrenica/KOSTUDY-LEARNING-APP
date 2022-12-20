@@ -91,10 +91,15 @@ class AuthController extends GetxController {
   }
 
   showLoginAlertDialog() {
-    return Get.dialog(Dialogs.questionStartDialog(onTap: () {
-      Get.back();
-      navigateToLoginPage();
-    }), barrierDismissible: true);
+    return Get.dialog(
+        Dialogs.questionStartDialog(
+            onTap: () {
+              Get.back();
+              navigateToLoginPage();
+            },
+            description: 'Ju duhet te kyqeni per filluar kuizin',
+            title: 'Pershendetje...'),
+        barrierDismissible: true);
   }
 
   void navigateToLoginPage() {

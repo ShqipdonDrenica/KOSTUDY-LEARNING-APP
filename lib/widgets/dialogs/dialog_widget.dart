@@ -7,22 +7,53 @@ class Dialogs {
   factory Dialogs() {
     return _singleton;
   }
-  static Widget questionStartDialog({required VoidCallback onTap}) {
+  static Widget questionStartDialog(
+      {required VoidCallback onTap,
+      required String title,
+      required String description,
+      VoidCallback? cancelOnTap}) {
     return AlertDialog(
       content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              'Pershendetje....',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              title,
+              style: const TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 18.0),
-              child: Text('Ju duhet te kyqeni per filluar kuizin'),
+              padding: const EdgeInsets.only(top: 18.0),
+              child: Text(description),
             )
           ]),
-      actions: [TextButton(onPressed: onTap, child: const Text('konfirmoj'))],
+      actions: [
+        title != 'Pershendetje...'
+            ? TextButton(
+                onPressed: cancelOnTap,
+                child: const Text(
+                  'Anuloj',
+                  style: TextStyle(color: Colors.black),
+                ))
+            : const SizedBox.shrink(),
+        TextButton(
+            onPressed: onTap,
+            child: title == 'Pershendetje...'
+                ? const Text('konfirmoj')
+                : Container(
+                    alignment: Alignment.center,
+                    width: 60,
+                    height: 30,
+                    color: Colors.red,
+                    child: const Text(
+                      'Fshij',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ))
+      ],
     );
   }
 }

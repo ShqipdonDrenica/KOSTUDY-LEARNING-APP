@@ -48,6 +48,9 @@ dependencies:
   easy_separator: ^1.0.1
   device_preview: ^1.1.0
   flutter_phoenix: ^1.1.0
+  uuid: ^3.0.6
+  shared_preferences: ^2.0.15
+  flutter_slidable: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

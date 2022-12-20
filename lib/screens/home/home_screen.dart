@@ -5,6 +5,7 @@ import 'package:flutter_study_app/configs/themes/costum_text_styles.dart';
 import 'package:flutter_study_app/configs/themes/ui_parameters.dart';
 import 'package:flutter_study_app/controllers/quiz_paper_controller.dart';
 import 'package:flutter_study_app/controllers/zoom_drawer_controller.dart';
+import 'package:flutter_study_app/main.dart';
 import 'package:flutter_study_app/screens/home/menu_screen.dart';
 import 'package:flutter_study_app/screens/home/question_card_screen.dart';
 import 'package:flutter_study_app/widgets/app_circle_button_widget.dart';
@@ -82,16 +83,37 @@ class HomeScreen extends GetView<MyZoomDraweController> {
                       ),
                     ),
                   ),
-                  Container(
-                      width: 100,
-                      height: 50,
-                      color: Colors.white,
-                      child: TextButton(
-                        child: const Text('Shto nje kuiz'),
-                        onPressed: () {
-                          Get.bottomSheet(const BottomSheetCreateWidget());
-                        },
-                      )),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            'Deshironi te shtoni nje kuiz?',
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Container(
+                            // margin: const EdgeInsets.only(left: 150),
+                            width: 100,
+                            height: 50,
+                            color: Colors.white,
+                            child: TextButton(
+                              child: const Text('Shto nje kuiz'),
+                              onPressed: () {
+                                Get.to(() => BottomSheetCreateWidget());
+                              },
+                            )),
+                      ],
+                    ),
+                  ),
                   const SizedBox(
                     height: 40,
                   ),

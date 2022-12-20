@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_study_app/controllers/edit_quiz_controller.dart';
 import 'package:flutter_study_app/controllers/quiz_paper_controller.dart';
 import 'package:flutter_study_app/widgets/text_form_field_widget.dart';
 import 'package:get/get.dart';
 
-import '../models/question_paper_model.dart';
-
-class BottomSheetCreateWidget extends StatefulWidget {
-  BottomSheetCreateWidget({super.key, this.quiz});
-
-  QuestionPaperModel? quiz;
-
-  @override
-  State<BottomSheetCreateWidget> createState() =>
-      _BottomSheetCreateWidgetState();
-}
-
-class _BottomSheetCreateWidgetState extends State<BottomSheetCreateWidget> {
-  final quizPaperController = Get.find<QuizPaperController>();
+class BottomSheetEditWidget extends StatelessWidget {
+  const BottomSheetEditWidget({super.key});
+  // static QuestionPaperModel? quiz;
   @override
   Widget build(BuildContext context) {
+    final quizPaperController = Get.find<QuizPaperController>();
+
+    final editQuizController =
+        Get.put<EditQuizController>(EditQuizController());
+
     return Obx(
       () => Scaffold(
         body: Container(
@@ -50,7 +45,7 @@ class _BottomSheetCreateWidgetState extends State<BottomSheetCreateWidget> {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.titleQuizController.value,
+                      editQuizController.titleQuizController.value,
                   hintText: 'Titulli i kuizit',
                 ),
                 const SizedBox(
@@ -62,7 +57,7 @@ class _BottomSheetCreateWidgetState extends State<BottomSheetCreateWidget> {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.descriptionQuizController.value,
+                      editQuizController.descriptionQuizController.value,
                   hintText: 'Pershkrimi i kuizit',
                 ),
                 const SizedBox(
@@ -74,7 +69,7 @@ class _BottomSheetCreateWidgetState extends State<BottomSheetCreateWidget> {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.imageQuizController.value,
+                      editQuizController.imageQuizController.value,
                   hintText: 'Foto e kuizit',
                 ),
                 const SizedBox(
@@ -86,7 +81,7 @@ class _BottomSheetCreateWidgetState extends State<BottomSheetCreateWidget> {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.timeQuizController.value,
+                      editQuizController.timeQuizController.value,
                   hintText: 'Koha caktuar e kuizit (ne sekonda)',
                 ),
                 Row(
@@ -97,33 +92,32 @@ class _BottomSheetCreateWidgetState extends State<BottomSheetCreateWidget> {
                           top: 20,
                           bottom: 40,
                         ),
-                        width: 110,
+                        width: 130,
                         height: 50,
                         decoration: BoxDecoration(
                           color: Get.theme.primaryColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: TextButton(
+                          onPressed: () async {
+                            await editQuizController.updateQuiz();
+                          },
                           child: const Text(
-                            'Krijo kuizin',
+                            'Redakto kuizin',
                             style: TextStyle(color: Colors.white),
                           ),
-                          onPressed: () {
-                            quizPaperController.idOfQuiz++;
-                            quizPaperController.saveID();
-                            quizPaperController.createQuiz(
-                              description: quizPaperController
-                                  .descriptionQuizController.value.text,
-                              id: quizPaperController.idOfQuiz.toString(),
-                              imageUrl: quizPaperController
-                                  .imageQuizController.value.text,
-                              questionCount: 5,
-                              timeSeconds: int.parse(quizPaperController
-                                  .timeQuizController.value.text),
-                              title: quizPaperController
-                                  .titleQuizController.value.text,
-                            );
-                          },
+                          // quizPaperController.createQuiz(
+                          //   description: quizPaperController
+                          //       .descriptionQuizController.value.text,
+                          //   id: quizPaperController.idOfQuiz.toString(),
+                          //   imageurl: quizPaperController
+                          //       .imageQuizController.value.text,
+                          //   questioncount: 5,
+                          //   timeseconds: int.parse(quizPaperController
+                          //       .timeQuizController.value.text),
+                          //   title: quizPaperController
+                          //       .titleQuizController.value.text,
+                          // );
                         )),
                   ],
                 ),

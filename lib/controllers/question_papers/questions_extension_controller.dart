@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_study_app/controllers/auth_controller.dart';
 import 'package:flutter_study_app/controllers/question_papers/question_controller.dart';
 import 'package:flutter_study_app/firebase_ref/references.dart';
@@ -51,7 +50,7 @@ extension QuestionExtensionController on QuestionController {
           "points": points(),
           "correct_answer": '$correctQuestionCount/${allQuestions.length}',
           "question_id": questionPaperModel.id,
-          "time": questionPaperModel.timeSeconds - remainSeconds
+          "time": questionPaperModel.timeSeconds! - remainSeconds
         });
     await batch.commit();
     await navigateToHome();
@@ -60,8 +59,8 @@ extension QuestionExtensionController on QuestionController {
   points() {
     var points = (correctQuestionCount / allQuestions.length) *
         100 *
-        (questionPaperModel.timeSeconds - remainSeconds) /
-        questionPaperModel.timeSeconds *
+        (questionPaperModel.timeSeconds! - remainSeconds) /
+        questionPaperModel.timeSeconds! *
         100;
     return points.toStringAsFixed(2);
   }
