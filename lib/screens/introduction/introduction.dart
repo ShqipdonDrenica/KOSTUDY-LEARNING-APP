@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_study_app/configs/themes/app_colors.dart';
+import 'package:flutter_study_app/controllers/create_quiz_controller.dart';
+import 'package:flutter_study_app/controllers/zoom_drawer_controller.dart';
 import 'package:flutter_study_app/screens/home/home_screen.dart';
+import 'package:flutter_study_app/screens/home/user_home_screen.dart';
 import 'package:flutter_study_app/widgets/app_circle_button_widget.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class AppIntroductionScreen extends StatelessWidget {
-  const AppIntroductionScreen({super.key});
-
+  AppIntroductionScreen({super.key});
+  MyZoomDraweController myZoomDraweController =
+      Get.put(MyZoomDraweController());
+  CreateQuizController createQuizController =
+      Get.put<CreateQuizController>(CreateQuizController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,9 +40,16 @@ class AppIntroductionScreen extends StatelessWidget {
               height: 40,
             ),
             AppCircleButtonWidget(
-              onTap: () => Get.to(
-                () => HomeScreen(),
-              ),
+              onTap: () {
+                myZoomDraweController.user.value == null ||
+                        myZoomDraweController.user.value!.email !=
+                            'shqipdondrenica@gmail.com'
+                    ? Get.to(() => UserHomeScreen())
+                    : Get.to(() => HomeScreen());
+
+                // createQuizController
+                //     .getUserRole(myZoomDraweController.user.value!.email);
+              },
               child: const Icon(
                 Icons.arrow_forward,
                 size: 35,

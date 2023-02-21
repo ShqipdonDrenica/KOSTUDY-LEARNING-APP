@@ -6,9 +6,10 @@ import 'package:flutter_study_app/configs/themes/ui_parameters.dart';
 import 'package:flutter_study_app/controllers/create_quiz_controller.dart';
 import 'package:flutter_study_app/controllers/quiz_paper_controller.dart';
 import 'package:flutter_study_app/controllers/zoom_drawer_controller.dart';
-
+import 'package:flutter_study_app/main.dart';
 import 'package:flutter_study_app/screens/home/menu_screen.dart';
 import 'package:flutter_study_app/screens/home/question_card_screen.dart';
+import 'package:flutter_study_app/screens/home/user_question_card_screen.dart';
 import 'package:flutter_study_app/widgets/app_circle_button_widget.dart';
 import 'package:flutter_study_app/widgets/bottom_sheet_create_widget.dart';
 import 'package:flutter_study_app/widgets/content_area_widget.dart';
@@ -17,13 +18,13 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 
 // ignore: must_be_immutable
-class HomeScreen extends GetView<MyZoomDraweController> {
-  HomeScreen({super.key});
+class UserHomeScreen extends GetView<MyZoomDraweController> {
+  UserHomeScreen({super.key});
   QuizPaperController questionPaperController = Get.put(QuizPaperController());
   CreateQuizController createQuizController = Get.put(CreateQuizController());
   MyZoomDraweController myZoomDraweController =
       Get.put(MyZoomDraweController());
-  static const String routeName = "/home";
+  static const String routeName = "/userhomeScreen";
 
   @override
   Widget build(BuildContext context) {
@@ -86,47 +87,6 @@ class HomeScreen extends GetView<MyZoomDraweController> {
                       ),
                     ),
                   ),
-                  // ignore: unrelated_type_equality_checks
-
-                  // ignore: unrelated_type_equality_checks
-                  // createQuizController.getUserRole(
-                  //           email: controller.user.value!.email ?? '',
-                  //         ) ==
-                  //         0
-                  //     ?
-                  // controller.user.value!.email.toString() ==
-                  //         'shqipdondrenica@gmail.com'
-                  // ?
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Expanded(
-                          child: Text(
-                            'Deshironi te shtoni nje kuiz?',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Container(
-                            width: 100,
-                            height: 50,
-                            color: Colors.white,
-                            child: TextButton(
-                              child: const Text('Shto nje kuiz'),
-                              onPressed: () {
-                                Get.offAll(() => BottomSheetCreateWidget());
-                              },
-                            )),
-                      ],
-                    ),
-                  ),
                   const SizedBox(
                     height: 40,
                   ),
@@ -139,7 +99,7 @@ class HomeScreen extends GetView<MyZoomDraweController> {
                           () => ListView.separated(
                               shrinkWrap: true,
                               itemBuilder: (BuildContext context, int index) {
-                                return QuestionCardScreen(
+                                return UserQuestionCardScreen(
                                   model:
                                       questionPaperController.allPapers[index],
                                 );

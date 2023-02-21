@@ -1,18 +1,33 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_study_app/controllers/auth_controller.dart';
-import 'package:flutter_study_app/firebase_ref/references.dart';
-import 'package:flutter_study_app/models/question_paper_model.dart';
-import 'package:flutter_study_app/screens/questions/questions_screen.dart';
-import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_study_app/models/question_paper_model.dart';
+import 'package:flutter_study_app/screens/home/home_screen.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class QuizPaperController extends GetxController {
+class CreateQuizController extends GetxController {
   final allPaperImages = <String>[].obs;
   final allPapers = <QuestionPaperModel>[].obs;
   var fireStore = FirebaseFirestore.instance;
+  RegExp nrRegExp = RegExp(r'^[0-9]+$');
+
+  final createQuizFormKey = GlobalKey<FormState>().obs;
+  final createQuestion1FormKey = GlobalKey<FormState>().obs;
+  final createQuestion2FormKey = GlobalKey<FormState>().obs;
+  final createQuestion3FormKey = GlobalKey<FormState>().obs;
+  final createQuestion4FormKey = GlobalKey<FormState>().obs;
+  final createQuestion5FormKey = GlobalKey<FormState>().obs;
+
+  var allQuizPaperCreated = false.obs;
+
+  var createdQuiz = false.obs;
+
+  var firstQuestionCreated = false.obs;
+  var secondQuestionCreated = false.obs;
+  var thirdQuestionCreated = false.obs;
+  var fourthQuestionCreated = false.obs;
+  var fifthQuestionCreated = false.obs;
 
   static QuestionPaperModel? question;
 
@@ -25,7 +40,7 @@ class QuizPaperController extends GetxController {
   var timeQuizController = TextEditingController().obs;
 
   var idOfQuiz = 0.obs;
-  var idOfQuestion = 0.obs;
+  var idOfQuestion = 2.obs;
   static const String prefStringID = "idS";
   //controllers for questions
   var firstQuestionController = TextEditingController().obs;
@@ -66,9 +81,42 @@ class QuizPaperController extends GetxController {
   var fifthAnswerControllerB = TextEditingController().obs;
   var fifthAnswerControllerC = TextEditingController().obs;
   var fifthAnswerControllerD = TextEditingController().obs;
-  late GoogleSignInAccount account;
 
-  // var idOfQuizController = TextEditingController().obs;
+  Rx<User?> useri = Rxn();
+
+  // bool isAdmin() {
+  //   return user.role == role.admin;
+  // }
+
+  // bool isModerator() {
+  //   return user?.role == roleType.moderator;
+  // }
+
+  // bool isUser() {
+  //   return user?.role == roleType.user;
+  // }
+
+  // bool isAdmin() {
+  //   return user?.role == roleType.admin;
+  // }
+
+  // bool isModerator() {
+  //   return user?.role == roleType.moderator;
+  // }
+
+  // bool isUser() {
+  //   return user?.role == roleType.user;
+  // }
+
+  navigateToHomePage() {
+    Get.to(() => HomeScreen());
+    titleQuizController.value.text = '';
+    descriptionQuizController.value.text = '';
+    idQuizController.value.text = '';
+    imageQuizController.value.text = '';
+    numberOfQuestionController.value.text = '';
+    timeQuizController.value.text = '';
+  }
 
   void saveQuestionId() async {
     final prefs = await SharedPreferences.getInstance();
@@ -241,105 +289,96 @@ class QuizPaperController extends GetxController {
     await docQuiz.set(json);
   }
 
-  // Future deleteQuiz({required String docId}) async {
-  //   final docQuiz =
-  //       FirebaseFirestore.instance.collection('questionPapers').doc(docId);
-
-  //   // final docQuestion = FirebaseFirestore.instance
-  //   //     .collection('questionPapers')
-  //   //     .doc(docId)
-  //   //     .collection('questions')
-  //   //   .doc();
-
-  //   await docQuiz.delete();
-  //   // await docQuestion.delete();
-  // }
-
   // Future editQuiz({required String docId}) async {
   //   final docQuiz =
   //       FirebaseFirestore.instance.collection('questionPapers').doc(docId);
   // }
 
-  Stream<List<QuestionPaperModel>> getAllPapersService() {
-    // List<String> imgName = ["biology", "chemistry", "maths", "physics"];
-    //pass image
-    //     for (var img in imgName) {
-    //   final imgUrl = await Get.put(FirebaseStorageService()).getImage(img);
-    //   allPaperImages.add(imgUrl!);
-    // }
-    // try {
-    return fireStore
-        .collection('questionPapers')
-        .snapshots()
-        .map((QuerySnapshot query) {
-      final List<QuestionPaperModel> questionList = [];
-      for (final subject in query.docs) {
-        final questionModel =
-            QuestionPaperModel.fromDocumentSnapshot(json: subject);
-        questionList.add(questionModel);
-      }
-      // employees.sort(
-      //   (a, b) => a..toLowerCase().compareTo(b.fullName.toLowerCase()),
-      // );
-      return questionList;
-    });
-
-    // QuerySnapshot<Map<String, dynamic>> data = await questionPaperRF.get();
-    // final paperList = data.docs
-    //     .map((paper) => QuestionPaperModel.fromSnapshot(paper))
-    //     .toList();
-    // for (var paper in paperList) {
-    //   final imageUrl =
-    //       await Get.put(FirebaseStorageService()).getImage(paper.title);
-    //   paper.imageUrl = imageUrl;
-    //   print(imageUrl);
-    // }
-    //if exists a paper this not duplicate this
-    // allPapers.assignAll(paperList);
-    // return allPapers;
-    // } catch (e) {
-    //   print(e);
-    // }
-  }
-
-  // getQuestionPerSubject({required String docId}) async {
-  //   try {
-  //     var result = await fireStore
-  //         .collection('questionPapers')
-  //         .doc(docId)
-  //         .collection('questions')
-  //         .get();
-  //     // ignore: empty_catches
-  //   } catch (e) {}
-  // }
-
-  navigateToQuestions(
-      {required QuestionPaperModel paper, bool tryAgain = false}) {
-    AuthController authController = Get.put<AuthController>(AuthController());
-    if (authController.isLoggedIn()) {
-      if (tryAgain) {
-        Get.back();
-        //Get.offNameed
-
-        Get.toNamed(QuestionsScreen.routeName,
-            arguments: paper, preventDuplicates: false);
-      } else {
-        Get.toNamed(QuestionsScreen.routeName, arguments: paper);
-        //Get.toNamed
-      }
-    } else {
-      if (kDebugMode) {
-        print('The title is ${paper.title}');
-      }
-      return authController.showLoginAlertDialog();
+  Future<void> submit() async {
+    if (!createQuizFormKey.value.currentState!.validate()) {
+      return;
     }
+    createQuizFormKey.value.currentState!.save();
+    createdQuiz.value = true;
   }
+
+  Future<void> submitQuestion1() async {
+    if (!createQuestion1FormKey.value.currentState!.validate()) {
+      return;
+    }
+    createQuestion1FormKey.value.currentState!.save();
+    firstQuestionCreated.value = true;
+  }
+
+  Future<void> submitQuestion2() async {
+    if (!createQuestion2FormKey.value.currentState!.validate()) {
+      return;
+    }
+    createQuestion2FormKey.value.currentState!.save();
+    secondQuestionCreated.value = true;
+  }
+
+  Future<void> submitQuestion3() async {
+    if (!createQuestion3FormKey.value.currentState!.validate()) {
+      return;
+    }
+    createQuestion3FormKey.value.currentState!.save();
+    thirdQuestionCreated.value = true;
+  }
+
+  Future<void> submitQuestion4() async {
+    if (!createQuestion4FormKey.value.currentState!.validate()) {
+      return;
+    }
+    createQuestion4FormKey.value.currentState!.save();
+    fourthQuestionCreated.value = true;
+  }
+
+  Future<void> submitQuestion5() async {
+    if (!createQuestion5FormKey.value.currentState!.validate()) {
+      return;
+    }
+    createQuestion5FormKey.value.currentState!.save();
+    fifthQuestionCreated.value = true;
+  }
+
+  // Future<void> getUserRole({required String email}) async {
+  //   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  //   var snapshot =
+  //       await _db.collection("users").where("email", isEqualTo: email).get();
+
+  //   int role = snapshot.docs.first.data()['role'];
+  //   print(role);
+  // }
+  Future<int?> getUserRole(String? email) async {
+    if (email == null) return null;
+    final FirebaseFirestore _db = FirebaseFirestore.instance;
+    var snapshot =
+        await _db.collection("users").where("email", isEqualTo: email).get();
+    if (snapshot.docs.isEmpty) return null;
+    int role = snapshot.docs.first.data()['role'];
+    return role;
+  }
+
+  // getRole() async {
+  //   int _role;
+  //   final QuerySnapshot result = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .where('email', isEqualTo: 'shqipdondrenica@gmail.com')
+  //       .get();
+  //   final List<DocumentSnapshot> documents = result.docs;
+  //   if (documents.length == 1) {
+  //     final int role = documents[0].data()['role'];
+
+  //     _role = role;
+  //   }
+  // }
 
   @override
   void onInit() async {
-    allPapers.bindStream(getAllPapersService());
     getCurrentIndex();
     getCurrentQuestionIndex();
+    // getRole();
     super.onInit();
   }
 }

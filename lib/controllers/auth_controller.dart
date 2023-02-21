@@ -1,16 +1,38 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_study_app/firebase_ref/references.dart';
+import 'package:flutter_study_app/models/question_paper_model.dart';
 import 'package:flutter_study_app/screens/home/home_screen.dart';
 import 'package:flutter_study_app/screens/login/login_screen.dart';
 import 'package:flutter_study_app/widgets/dialogs/dialog_widget.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../screens/home/user_home_screen.dart';
+
 class AuthController extends GetxController {
   late FirebaseAuth _auth;
   final _user = Rxn<User>();
   late Stream<User?> _authStateChanges;
+
+  Future<int?> checkRole() async {
+    DocumentSnapshot userDoc =
+        await fireStore.collection("users").doc(_user.value!.email).get();
+    UserModel userModel =
+        UserModel.fromJson(userDoc.data as Map<String, dynamic>);
+    if (userModel.role == 1) {
+      if (kDebugMode) {
+        print('Admin');
+      }
+    } else if (userModel.role == 0) {
+      if (kDebugMode) {
+        print('Super admin');
+      }
+    }
+    return null;
+  }
+
   void initAuth() async {
     await Future.delayed(const Duration(seconds: 2));
     _auth = FirebaseAuth.instance;
@@ -38,9 +60,25 @@ class AuthController extends GetxController {
     );
 
     //once signed in, return the UserCredential
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    await saveUser(account);
-    navigateToHomePage();
+    try {
+      //once signed in, return the UserCredential
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (userCredential.user!.email == "shqipdondrenica@gmail.com") {
+        await saveUser(account, 1);
+        navigateToHomePage();
+      } else {
+        await saveUser(account, 0);
+        navigateToUserHomePage();
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error signing in with Google: $e");
+      }
+      // Handle the error here
+    }
+
     // final GoogleSignIn _googleSignIn = GoogleSignIn();
     // try {
     //   GoogleSignInAccount? account = await _googleSignIn.signIn();
@@ -63,18 +101,22 @@ class AuthController extends GetxController {
     return _user.value;
   }
 
-  saveUser(GoogleSignInAccount account) async {
-    return await userRF.doc(account.email).set({
+  Future<void> saveUser(GoogleSignInAccount account, int role) async {
+    final collectionRef = FirebaseFirestore.instance.collection('users');
+    final docRef = collectionRef.doc(account.email);
+
+    await docRef.set({
       "email": account.email,
       "name": account.displayName,
-      "profilepic": account.photoUrl
+      "profilepic": account.photoUrl,
+      "role": role,
     });
   }
 
   Future<void> signOut() async {
     try {
       await _auth.signOut();
-      navigateToHomePage();
+      navigateToIntroduction();
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) {
         print(e);
@@ -84,6 +126,10 @@ class AuthController extends GetxController {
 
   navigateToHomePage() {
     Get.offAllNamed(HomeScreen.routeName);
+  }
+
+  navigateToUserHomePage() {
+    Get.to(UserHomeScreen());
   }
 
   void navigateToIntroduction() {

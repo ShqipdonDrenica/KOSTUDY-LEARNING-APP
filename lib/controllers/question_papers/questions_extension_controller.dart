@@ -45,12 +45,12 @@ extension QuestionExtensionController on QuestionController {
         userRF
             .doc(user.email)
             .collection('myrecent_tests')
-            .doc(questionPaperModel.id),
+            .doc(questionPaperModel!.id),
         {
           "points": points(),
           "correct_answer": '$correctQuestionCount/${allQuestions.length}',
-          "question_id": questionPaperModel.id,
-          "time": questionPaperModel.timeSeconds! - remainSeconds
+          "question_id": questionPaperModel!.id,
+          "time": questionPaperModel!.timeSeconds! - remainSeconds
         });
     await batch.commit();
     await navigateToHome();
@@ -59,8 +59,8 @@ extension QuestionExtensionController on QuestionController {
   points() {
     var points = (correctQuestionCount / allQuestions.length) *
         100 *
-        (questionPaperModel.timeSeconds! - remainSeconds) /
-        questionPaperModel.timeSeconds! *
+        (questionPaperModel!.timeSeconds! - remainSeconds) /
+        questionPaperModel!.timeSeconds! *
         100;
     return points.toStringAsFixed(2);
   }

@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuestionPaperModel {
-  late String id;
-  late String title;
-  late String? imageUrl;
-  late String description;
-  late int timeSeconds;
-  late List<Questions>? questions;
-  late int questionCount;
+  String? id;
+  String? title;
+  String? imageUrl;
+  String? description;
+  int? timeSeconds;
+  List<Questions>? questions;
+  int? questionCount;
 
   QuestionPaperModel(
       {required this.id,
@@ -24,10 +24,7 @@ class QuestionPaperModel {
         imageUrl = json['image_url'] as String,
         description = json['description'] as String,
         timeSeconds = json['time_seconds'] as int,
-        questionCount = json['question_count'] as int,
-        questions = (json['questions'] as List)
-            .map((dynamic e) => Questions.fromJson(e as Map<String, dynamic>))
-            .toList();
+        questionCount = json['question_count'] as int;
 
   QuestionPaperModel.fromDocumentSnapshot({
     required DocumentSnapshot json,
@@ -50,7 +47,7 @@ class QuestionPaperModel {
         timeSeconds = json['time_seconds'],
         questionCount = json['question_count'] as int;
 
-  String timeinMinutes() => "${(timeSeconds / 60).ceil()} mins";
+  String timeinMinutes() => "${(timeSeconds! / 60).ceil()} mins";
   // questions = (json['questions'] as List)
   //     .map((dynamic e) => Questions.fromJson(e as Map<String, dynamic>))
   //     .toList();
@@ -124,5 +121,37 @@ class Answers {
     data['identifier'] = identifier;
     data['answer'] = answer;
     return data;
+  }
+}
+
+class UserModel {
+  final String email;
+  final String name;
+  final String profilepic;
+  final int role;
+
+  UserModel({
+    required this.email,
+    required this.name,
+    required this.profilepic,
+    required this.role,
+  });
+
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      email: json["email"],
+      name: json["name"],
+      profilepic: json["profilepic"],
+      role: json["role"],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "email": email,
+      "name": name,
+      "profilepic": profilepic,
+      "role": role,
+    };
   }
 }

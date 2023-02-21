@@ -18,9 +18,10 @@ Future main() async {
   await Firebase.initializeApp();
   runApp(Phoenix(child: const MyApp())
 
-      //     DevicePreview(
-      //   builder: (context) => const MyApp(), // Wrap your app
-      // ),)
+      //       DevicePreview(
+      //     builder: (context) => const MyApp(), // Wrap your app
+      //   ),
+      // ),
       // GetMaterialApp(
       //   debugShowCheckedModeBanner: false,
       //   home: DataUploaderScreen(),

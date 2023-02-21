@@ -12,8 +12,7 @@ import 'package:get/get.dart';
 class AppRoutes {
   static List<GetPage> routes() => [
         GetPage(name: "/", page: () => const SplashScreen()),
-        GetPage(
-            name: "/introduction", page: () => const AppIntroductionScreen()),
+        GetPage(name: "/introduction", page: () => AppIntroductionScreen()),
         GetPage(
             name: "/home",
             page: () => HomeScreen(),

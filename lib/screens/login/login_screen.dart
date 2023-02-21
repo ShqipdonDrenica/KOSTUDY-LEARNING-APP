@@ -35,8 +35,8 @@ class LoginScreen extends GetView<AuthController> {
             ),
           ),
           MainButton(
-              onTap: () {
-                controller.signInWithGoogle();
+              onTap: () async {
+                await controller.signInWithGoogle();
               },
               child: Stack(
                 children: [

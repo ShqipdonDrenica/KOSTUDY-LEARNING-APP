@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 
 class QuestionController extends GetxController {
   var loadingStatus = LoadingStatus.loading.obs;
-  late QuestionPaperModel questionPaperModel;
+  QuestionPaperModel? questionPaperModel;
 
   final questionIndex = 0.obs;
   final allQuestions = <Questions>[];
@@ -30,7 +30,7 @@ class QuestionController extends GetxController {
 
   void tryAgain() {
     Get.find<QuizPaperController>()
-        .navigateToQuestions(paper: questionPaperModel, tryAgain: true);
+        .navigateToQuestions(paper: questionPaperModel!, tryAgain: true);
   }
 
   // ignore: non_constant_identifier_names
@@ -100,7 +100,7 @@ class QuestionController extends GetxController {
         questionPaper.questions!.isNotEmpty) {
       allQuestions.assignAll(questionPaper.questions!);
       currentQuestion.value = questionPaper.questions![0];
-      _startTimer(questionPaper.timeSeconds);
+      _startTimer(questionPaper.timeSeconds!);
 
       if (kDebugMode) {
         print(questionPaper.questions![0].question);
@@ -149,11 +149,15 @@ class QuestionController extends GetxController {
 
   @override
   void onReady() {
-    final questionPaper = Get.arguments as QuestionPaperModel;
-    if (kDebugMode) {
-      print(questionPaper.id);
+    final questionPaper = Get.arguments;
+    if (questionPaper != null && questionPaper is QuestionPaperModel) {
+      if (kDebugMode) {
+        print(questionPaper.id);
+      }
+      loadData(questionPaper);
+    } else {
+      // Handle the case where the argument is null or not a QuestionPaperModel
     }
-    loadData(questionPaper);
     super.onReady();
   }
 }

@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
 
-class TextFormFieldWidget extends StatelessWidget {
-  const TextFormFieldWidget(
+class TextFormFieldContactUsWidget extends StatelessWidget {
+  const TextFormFieldContactUsWidget(
       {Key? key,
       required this.textEditingController,
-      required this.callBackClear,
-      this.isPrefixIconVisible = false,
-      required this.callBackSearch,
-      required this.callBackPrefix,
       required this.hintText,
       required this.onChanged,
-      this.prefixText = '',
+      this.maxLines,
       this.count,
       this.validator})
       : super(key: key);
   final TextEditingController textEditingController;
   final ValueChanged onChanged;
-  final VoidCallback callBackClear, callBackPrefix, callBackSearch;
-  final bool isPrefixIconVisible;
+
   final String hintText;
-  final String? prefixText;
+  final int? maxLines;
   final int? count;
   final Function(String)? validator;
   // final Function(String) onChanged;
@@ -32,22 +27,12 @@ class TextFormFieldWidget extends StatelessWidget {
       // onTap: () => {
       //   count!,
       // },
+      maxLines: maxLines,
       cursorColor: Colors.grey,
       controller: textEditingController,
       onChanged: onChanged,
       textAlignVertical: TextAlignVertical.center,
       decoration: InputDecoration(
-        prefixIcon: Padding(
-          padding: const EdgeInsetsDirectional.only(
-            start: 8.0,
-          ),
-          child: prefixText == ''
-              ? const Icon(Icons.edit)
-              : Padding(
-                  padding: const EdgeInsets.only(top: 13.0),
-                  child: Text(prefixText!),
-                ),
-        ),
         hintText: hintText,
         hintStyle: theme.bodyText2!.copyWith(
           fontFamily: 'Avenir',
@@ -66,7 +51,7 @@ class TextFormFieldWidget extends StatelessWidget {
           borderSide: const BorderSide(color: Colors.transparent, width: 1.0),
           borderRadius: BorderRadius.circular(10.0),
         ),
-        contentPadding: const EdgeInsets.only(left: 20),
+        contentPadding: const EdgeInsets.all(16),
         alignLabelWithHint: true,
       ),
     );

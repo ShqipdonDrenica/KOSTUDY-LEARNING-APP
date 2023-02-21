@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_study_app/controllers/edit_quiz_controller.dart';
-import 'package:flutter_study_app/controllers/quiz_paper_controller.dart';
 import 'package:flutter_study_app/widgets/text_form_field_widget.dart';
 import 'package:get/get.dart';
 
@@ -9,8 +8,6 @@ class BottomSheetEditWidget extends StatelessWidget {
   // static QuestionPaperModel? quiz;
   @override
   Widget build(BuildContext context) {
-    final quizPaperController = Get.find<QuizPaperController>();
-
     final editQuizController =
         Get.put<EditQuizController>(EditQuizController());
 
@@ -106,18 +103,6 @@ class BottomSheetEditWidget extends StatelessWidget {
                             'Redakto kuizin',
                             style: TextStyle(color: Colors.white),
                           ),
-                          // quizPaperController.createQuiz(
-                          //   description: quizPaperController
-                          //       .descriptionQuizController.value.text,
-                          //   id: quizPaperController.idOfQuiz.toString(),
-                          //   imageurl: quizPaperController
-                          //       .imageQuizController.value.text,
-                          //   questioncount: 5,
-                          //   timeseconds: int.parse(quizPaperController
-                          //       .timeQuizController.value.text),
-                          //   title: quizPaperController
-                          //       .titleQuizController.value.text,
-                          // );
                         )),
                   ],
                 ),
@@ -134,7 +119,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.firstQuestionController.value,
+                      editQuizController.firstQuestionController.value,
                   hintText: 'Shkruaj pytjen e pare',
                   prefixText: '1:',
                 ),
@@ -144,19 +129,9 @@ class BottomSheetEditWidget extends StatelessWidget {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.firstCorrectAnswer.value,
+                      editQuizController.firstCorrectAnswerController.value,
                   hintText: 'Cila eshte pergjigja e sakt',
                 ),
-                // TextFormFieldWidget(
-
-                //   callBackClear: () {},
-                //   callBackPrefix: () {},
-                //   callBackSearch: () {},
-                //   onChanged: (value) {},
-                //   textEditingController:
-                //       quizPaperController.idOfQuizController.value,
-                //   hintText: 'Shkruaj id e kuizit',
-                // ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -169,7 +144,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.firstAnswerControllerA.value,
+                            editQuizController.firstAnswerControllerA.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'A:',
                       ),
@@ -184,7 +159,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.firstAnswerControllerB.value,
+                            editQuizController.firstAnswerControllerB.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'B:',
                       ),
@@ -200,7 +175,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.firstAnswerControllerC.value,
+                            editQuizController.firstAnswerControllerC.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'C:',
                       ),
@@ -215,7 +190,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.firstAnswerControllerD.value,
+                            editQuizController.firstAnswerControllerD.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'D:',
                       ),
@@ -228,7 +203,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                       bottom: 40,
                       left: 230,
                     ),
-                    width: 110,
+                    width: 200,
                     height: 50,
                     decoration: BoxDecoration(
                       color: Get.theme.primaryColor,
@@ -236,57 +211,34 @@ class BottomSheetEditWidget extends StatelessWidget {
                     ),
                     child: TextButton(
                       child: const Text(
-                        'Krijo pytjen',
+                        'Redakto pytjen',
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {
-                        quizPaperController.idOfQuestion++;
-                        quizPaperController.saveQuestionId();
-                        quizPaperController.createQuestion(
-                          id: quizPaperController.idOfQuestion.toString(),
-                          correctAnswer: quizPaperController
-                              .firstCorrectAnswer.value.text
+                      onPressed: () async {
+                        await editQuizController.updateQuestion(
+                          correctAnswer: editQuizController
+                              .firstCorrectAnswerController.value.text
                               .toUpperCase(),
-                          question: quizPaperController
+                          question: editQuizController
                               .firstQuestionController.value.text,
+                          index: 0,
                         );
-                        quizPaperController.createAnswerA(
-                            answer: quizPaperController
+                        await editQuizController.updateAnswerA(
+                            answer: editQuizController
                                 .firstAnswerControllerA.value.text,
-                            identifier: quizPaperController
-                                        .firstAnswerControllerA.value.text ==
-                                    quizPaperController
-                                        .firstAnswerControllerA.value.text
-                                ? 'A'
-                                : 'j');
-                        quizPaperController.createAnswerB(
-                            answer: quizPaperController
+                            index: 0);
+                        await editQuizController.updateAnswerB(
+                            answer: editQuizController
                                 .firstAnswerControllerB.value.text,
-                            identifier: quizPaperController
-                                        .firstAnswerControllerB.value.text ==
-                                    quizPaperController
-                                        .firstAnswerControllerB.value.text
-                                ? 'B'
-                                : 'j');
-                        quizPaperController.createAnswerC(
-                            answer: quizPaperController
+                            index: 0);
+                        await editQuizController.updateAnswerC(
+                            answer: editQuizController
                                 .firstAnswerControllerC.value.text,
-                            identifier: quizPaperController
-                                        .firstAnswerControllerC.value.text ==
-                                    quizPaperController
-                                        .firstAnswerControllerC.value.text
-                                ? 'C'
-                                : 'j');
-                        quizPaperController.createAnswerD(
-                            answer: quizPaperController
+                            index: 0);
+                        await editQuizController.updateAnswerD(
+                            answer: editQuizController
                                 .firstAnswerControllerD.value.text,
-                            identifier: quizPaperController
-                                        .firstAnswerControllerD.value.text ==
-                                    quizPaperController
-                                        .firstAnswerControllerD.value.text
-                                ? 'D'
-                                : 'j');
-                        // quizPaperController.createAnswers();
+                            index: 0);
                       },
                     )),
                 const SizedBox(
@@ -298,7 +250,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.secondQuestionController.value,
+                      editQuizController.secondQuestionController.value,
                   hintText: 'Shkruaj pyetjen e dyt',
                   prefixText: '2:',
                 ),
@@ -308,19 +260,9 @@ class BottomSheetEditWidget extends StatelessWidget {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.secondCorrectAnswer.value,
+                      editQuizController.secondCorrectAnswerController.value,
                   hintText: 'Cila eshte pergjigja e sakt',
                 ),
-                // TextFormFieldWidget(
-
-                //   callBackClear: () {},
-                //   callBackPrefix: () {},
-                //   callBackSearch: () {},
-                //   onChanged: (value) {},
-                //   textEditingController:
-                //       quizPaperController.idOfQuizController.value,
-                //   hintText: 'Shkruaj id e kuizit',
-                // ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -333,7 +275,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.secondAnswerControllerA.value,
+                            editQuizController.secondAnswerControllerA.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'A:',
                       ),
@@ -348,7 +290,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.secondAnswerControllerB.value,
+                            editQuizController.secondAnswerControllerB.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'B:',
                       ),
@@ -364,7 +306,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.secondAnswerControllerC.value,
+                            editQuizController.secondAnswerControllerC.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'C:',
                       ),
@@ -379,7 +321,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.secondAnswerControllerD.value,
+                            editQuizController.secondAnswerControllerD.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'D:',
                       ),
@@ -400,57 +342,34 @@ class BottomSheetEditWidget extends StatelessWidget {
                     ),
                     child: TextButton(
                       child: const Text(
-                        'Krijo pytjen',
+                        'Redakto pytjen',
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {
-                        quizPaperController.idOfQuestion++;
-                        quizPaperController.saveQuestionId();
-                        quizPaperController.createQuestion(
-                          id: quizPaperController.idOfQuestion.toString(),
-                          correctAnswer: quizPaperController
-                              .secondCorrectAnswer.value.text
+                      onPressed: () async {
+                        await editQuizController.updateQuestion(
+                          correctAnswer: editQuizController
+                              .secondCorrectAnswerController.value.text
                               .toUpperCase(),
-                          question: quizPaperController
+                          question: editQuizController
                               .secondQuestionController.value.text,
+                          index: 1,
                         );
-                        quizPaperController.createAnswerA(
-                            answer: quizPaperController
+                        await editQuizController.updateAnswerA(
+                            answer: editQuizController
                                 .secondAnswerControllerA.value.text,
-                            identifier: quizPaperController
-                                        .secondAnswerControllerA.value.text ==
-                                    quizPaperController
-                                        .secondAnswerControllerA.value.text
-                                ? 'A'
-                                : 'j');
-                        quizPaperController.createAnswerB(
-                            answer: quizPaperController
+                            index: 1);
+                        await editQuizController.updateAnswerB(
+                            answer: editQuizController
                                 .secondAnswerControllerB.value.text,
-                            identifier: quizPaperController
-                                        .secondAnswerControllerB.value.text ==
-                                    quizPaperController
-                                        .secondAnswerControllerB.value.text
-                                ? 'B'
-                                : 'j');
-                        quizPaperController.createAnswerC(
-                            answer: quizPaperController
+                            index: 1);
+                        await editQuizController.updateAnswerC(
+                            answer: editQuizController
                                 .secondAnswerControllerC.value.text,
-                            identifier: quizPaperController
-                                        .secondAnswerControllerC.value.text ==
-                                    quizPaperController
-                                        .secondAnswerControllerC.value.text
-                                ? 'C'
-                                : 'j');
-                        quizPaperController.createAnswerD(
-                            answer: quizPaperController
+                            index: 1);
+                        await editQuizController.updateAnswerD(
+                            answer: editQuizController
                                 .secondAnswerControllerD.value.text,
-                            identifier: quizPaperController
-                                        .secondAnswerControllerD.value.text ==
-                                    quizPaperController
-                                        .secondAnswerControllerD.value.text
-                                ? 'D'
-                                : 'j');
-                        // quizPaperController.createAnswers();
+                            index: 1);
                       },
                     )),
                 const SizedBox(
@@ -462,7 +381,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.thirdQuestionController.value,
+                      editQuizController.thirdQuestionController.value,
                   hintText: 'Shkruaj pytjen e tret',
                   prefixText: '3:',
                 ),
@@ -472,19 +391,9 @@ class BottomSheetEditWidget extends StatelessWidget {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.thirdCorrectAnswer.value,
+                      editQuizController.thirdCorrectAnswerController.value,
                   hintText: 'Cila eshte pergjigja e sakt',
                 ),
-                // TextFormFieldWidget(
-
-                //   callBackClear: () {},
-                //   callBackPrefix: () {},
-                //   callBackSearch: () {},
-                //   onChanged: (value) {},
-                //   textEditingController:
-                //       quizPaperController.idOfQuizController.value,
-                //   hintText: 'Shkruaj id e kuizit',
-                // ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -497,7 +406,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.thirdAnswerControllerA.value,
+                            editQuizController.thirdAnswerControllerA.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'A:',
                       ),
@@ -512,7 +421,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.thirdAnswerControllerB.value,
+                            editQuizController.thirdAnswerControllerB.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'B:',
                       ),
@@ -528,7 +437,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.thirdAnswerControllerC.value,
+                            editQuizController.thirdAnswerControllerC.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'C:',
                       ),
@@ -543,7 +452,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.thirdAnswerControllerD.value,
+                            editQuizController.thirdAnswerControllerD.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'D:',
                       ),
@@ -564,57 +473,34 @@ class BottomSheetEditWidget extends StatelessWidget {
                     ),
                     child: TextButton(
                       child: const Text(
-                        'Krijo pytjen',
+                        'redakto pytjen',
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {
-                        quizPaperController.idOfQuestion++;
-                        quizPaperController.saveQuestionId();
-                        quizPaperController.createQuestion(
-                          id: quizPaperController.idOfQuestion.toString(),
-                          correctAnswer: quizPaperController
-                              .thirdCorrectAnswer.value.text
+                      onPressed: () async {
+                        await editQuizController.updateQuestion(
+                          correctAnswer: editQuizController
+                              .thirdCorrectAnswerController.value.text
                               .toUpperCase(),
-                          question: quizPaperController
+                          question: editQuizController
                               .thirdQuestionController.value.text,
+                          index: 2,
                         );
-                        quizPaperController.createAnswerA(
-                            answer: quizPaperController
+                        await editQuizController.updateAnswerA(
+                            answer: editQuizController
                                 .thirdAnswerControllerA.value.text,
-                            identifier: quizPaperController
-                                        .thirdAnswerControllerA.value.text ==
-                                    quizPaperController
-                                        .thirdAnswerControllerA.value.text
-                                ? 'A'
-                                : 'j');
-                        quizPaperController.createAnswerB(
-                            answer: quizPaperController
+                            index: 2);
+                        await editQuizController.updateAnswerB(
+                            answer: editQuizController
                                 .thirdAnswerControllerB.value.text,
-                            identifier: quizPaperController
-                                        .thirdAnswerControllerB.value.text ==
-                                    quizPaperController
-                                        .thirdAnswerControllerB.value.text
-                                ? 'B'
-                                : 'j');
-                        quizPaperController.createAnswerC(
-                            answer: quizPaperController
+                            index: 2);
+                        await editQuizController.updateAnswerC(
+                            answer: editQuizController
                                 .thirdAnswerControllerC.value.text,
-                            identifier: quizPaperController
-                                        .thirdAnswerControllerC.value.text ==
-                                    quizPaperController
-                                        .thirdAnswerControllerC.value.text
-                                ? 'C'
-                                : 'j');
-                        quizPaperController.createAnswerD(
-                            answer: quizPaperController
+                            index: 2);
+                        await editQuizController.updateAnswerD(
+                            answer: editQuizController
                                 .thirdAnswerControllerD.value.text,
-                            identifier: quizPaperController
-                                        .thirdAnswerControllerD.value.text ==
-                                    quizPaperController
-                                        .thirdAnswerControllerD.value.text
-                                ? 'D'
-                                : 'j');
-                        // quizPaperController.createAnswers();
+                            index: 2);
                       },
                     )),
                 const SizedBox(
@@ -626,7 +512,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.fourthQuestionController.value,
+                      editQuizController.fourthQuestionController.value,
                   hintText: 'Shkruaj pytjen e katert',
                   prefixText: '4:',
                 ),
@@ -636,19 +522,9 @@ class BottomSheetEditWidget extends StatelessWidget {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.fourthCorrectAnswer.value,
+                      editQuizController.fourthCorrectAnswerController.value,
                   hintText: 'Cila eshte pergjigja e sakt',
                 ),
-                // TextFormFieldWidget(
-
-                //   callBackClear: () {},
-                //   callBackPrefix: () {},
-                //   callBackSearch: () {},
-                //   onChanged: (value) {},
-                //   textEditingController:
-                //       quizPaperController.idOfQuizController.value,
-                //   hintText: 'Shkruaj id e kuizit',
-                // ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -661,7 +537,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.fourthAnswerControllerA.value,
+                            editQuizController.fourthAnswerControllerA.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'A:',
                       ),
@@ -676,7 +552,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.fourthAnswerControllerB.value,
+                            editQuizController.fourthAnswerControllerB.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'B:',
                       ),
@@ -692,7 +568,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.fourthAnswerControllerC.value,
+                            editQuizController.fourthAnswerControllerC.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'C:',
                       ),
@@ -707,7 +583,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.fourthAnswerControllerD.value,
+                            editQuizController.fourthAnswerControllerD.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'D:',
                       ),
@@ -728,57 +604,34 @@ class BottomSheetEditWidget extends StatelessWidget {
                     ),
                     child: TextButton(
                       child: const Text(
-                        'Krijo pytjen',
+                        'redakto pytjen',
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {
-                        quizPaperController.idOfQuestion++;
-                        quizPaperController.saveQuestionId();
-                        quizPaperController.createQuestion(
-                          id: quizPaperController.idOfQuestion.toString(),
-                          correctAnswer: quizPaperController
-                              .fourthCorrectAnswer.value.text
+                      onPressed: () async {
+                        await editQuizController.updateQuestion(
+                          correctAnswer: editQuizController
+                              .fourthCorrectAnswerController.value.text
                               .toUpperCase(),
-                          question: quizPaperController
+                          question: editQuizController
                               .fourthQuestionController.value.text,
+                          index: 3,
                         );
-                        quizPaperController.createAnswerA(
-                            answer: quizPaperController
+                        await editQuizController.updateAnswerA(
+                            answer: editQuizController
                                 .fourthAnswerControllerA.value.text,
-                            identifier: quizPaperController
-                                        .fourthAnswerControllerA.value.text ==
-                                    quizPaperController
-                                        .fourthAnswerControllerA.value.text
-                                ? 'A'
-                                : 'j');
-                        quizPaperController.createAnswerB(
-                            answer: quizPaperController
+                            index: 3);
+                        await editQuizController.updateAnswerB(
+                            answer: editQuizController
                                 .fourthAnswerControllerB.value.text,
-                            identifier: quizPaperController
-                                        .fourthAnswerControllerB.value.text ==
-                                    quizPaperController
-                                        .fourthAnswerControllerB.value.text
-                                ? 'B'
-                                : 'j');
-                        quizPaperController.createAnswerC(
-                            answer: quizPaperController
+                            index: 3);
+                        await editQuizController.updateAnswerC(
+                            answer: editQuizController
                                 .fourthAnswerControllerC.value.text,
-                            identifier: quizPaperController
-                                        .fourthAnswerControllerC.value.text ==
-                                    quizPaperController
-                                        .fourthAnswerControllerC.value.text
-                                ? 'C'
-                                : 'j');
-                        quizPaperController.createAnswerD(
-                            answer: quizPaperController
+                            index: 3);
+                        await editQuizController.updateAnswerD(
+                            answer: editQuizController
                                 .fourthAnswerControllerD.value.text,
-                            identifier: quizPaperController
-                                        .fourthAnswerControllerD.value.text ==
-                                    quizPaperController
-                                        .fourthAnswerControllerD.value.text
-                                ? 'D'
-                                : 'j');
-                        // quizPaperController.createAnswers();
+                            index: 3);
                       },
                     )),
                 const SizedBox(
@@ -790,7 +643,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.fifthQuestionController.value,
+                      editQuizController.fifthQuestionController.value,
                   hintText: 'Shkruaj pytjen e peste',
                   prefixText: '5:',
                 ),
@@ -800,10 +653,9 @@ class BottomSheetEditWidget extends StatelessWidget {
                   callBackSearch: () {},
                   onChanged: (value) {},
                   textEditingController:
-                      quizPaperController.fifthCorrectAnswer.value,
+                      editQuizController.fifthCorrectAnswerController.value,
                   hintText: 'Cila eshte pergjigja e sakt',
                 ),
-
                 const SizedBox(
                   height: 20,
                 ),
@@ -816,7 +668,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.fifthAnswerControllerA.value,
+                            editQuizController.fifthAnswerControllerA.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'A:',
                       ),
@@ -831,7 +683,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.fifthAnswerControllerB.value,
+                            editQuizController.fifthAnswerControllerB.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'B:',
                       ),
@@ -847,7 +699,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.fifthAnswerControllerC.value,
+                            editQuizController.fifthAnswerControllerC.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'C:',
                       ),
@@ -862,7 +714,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.fifthAnswerControllerD.value,
+                            editQuizController.fifthAnswerControllerD.value,
                         hintText: 'Shkruaj pergjigjen',
                         prefixText: 'D:',
                       ),
@@ -883,57 +735,34 @@ class BottomSheetEditWidget extends StatelessWidget {
                     ),
                     child: TextButton(
                       child: const Text(
-                        'Krijo pytjen',
+                        'redakto pytjen',
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {
-                        quizPaperController.idOfQuestion++;
-                        quizPaperController.saveQuestionId();
-                        quizPaperController.createQuestion(
-                          id: quizPaperController.idOfQuestion.toString(),
-                          correctAnswer: quizPaperController
-                              .fifthCorrectAnswer.value.text
+                      onPressed: () async {
+                        await editQuizController.updateQuestion(
+                          correctAnswer: editQuizController
+                              .fifthCorrectAnswerController.value.text
                               .toUpperCase(),
-                          question: quizPaperController
+                          question: editQuizController
                               .fifthQuestionController.value.text,
+                          index: 4,
                         );
-                        quizPaperController.createAnswerA(
-                            answer: quizPaperController
+                        await editQuizController.updateAnswerA(
+                            answer: editQuizController
                                 .fifthAnswerControllerA.value.text,
-                            identifier: quizPaperController
-                                        .fifthAnswerControllerA.value.text ==
-                                    quizPaperController
-                                        .fifthAnswerControllerA.value.text
-                                ? 'A'
-                                : 'j');
-                        quizPaperController.createAnswerB(
-                            answer: quizPaperController
+                            index: 4);
+                        await editQuizController.updateAnswerB(
+                            answer: editQuizController
                                 .fifthAnswerControllerB.value.text,
-                            identifier: quizPaperController
-                                        .fifthAnswerControllerB.value.text ==
-                                    quizPaperController
-                                        .fifthAnswerControllerB.value.text
-                                ? 'B'
-                                : 'j');
-                        quizPaperController.createAnswerC(
-                            answer: quizPaperController
+                            index: 4);
+                        await editQuizController.updateAnswerC(
+                            answer: editQuizController
                                 .fifthAnswerControllerC.value.text,
-                            identifier: quizPaperController
-                                        .fifthAnswerControllerC.value.text ==
-                                    quizPaperController
-                                        .fifthAnswerControllerC.value.text
-                                ? 'C'
-                                : 'j');
-                        quizPaperController.createAnswerD(
-                            answer: quizPaperController
+                            index: 4);
+                        await editQuizController.updateAnswerD(
+                            answer: editQuizController
                                 .fifthAnswerControllerD.value.text,
-                            identifier: quizPaperController
-                                        .fifthAnswerControllerD.value.text ==
-                                    quizPaperController
-                                        .fifthAnswerControllerD.value.text
-                                ? 'D'
-                                : 'j');
-                        // quizPaperController.createAnswers();
+                            index: 4);
                       },
                     )),
               ],

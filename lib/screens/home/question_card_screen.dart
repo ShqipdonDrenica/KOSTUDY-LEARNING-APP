@@ -15,6 +15,7 @@ import 'package:flutter_study_app/widgets/bottomSheet_edit_widget.dart';
 import 'package:flutter_study_app/widgets/dialogs/dialog_widget.dart';
 import 'package:get/get.dart';
 
+// ignore: must_be_immutable
 class QuestionCardScreen extends GetView<QuizPaperController> {
   QuestionCardScreen({super.key, required this.model});
 
@@ -25,8 +26,7 @@ class QuestionCardScreen extends GetView<QuizPaperController> {
   @override
   Widget build(BuildContext context) {
     const double padding = 10;
-    // QuestionPaperController _questionPaperController =
-    //     Get.put(QuestionPaperController());
+
     return Slidable(
       startActionPane: ActionPane(
         motion: const StretchMotion(),
@@ -34,9 +34,14 @@ class QuestionCardScreen extends GetView<QuizPaperController> {
           SlidableAction(
             icon: Icons.edit,
             label: 'Redaktoni kuizin',
-            onPressed: (value) {
-              EditQuizController.question = model;
-              Get.to(() => BottomSheetEditWidget());
+            onPressed: (value) async {
+              EditQuizController.quiz = model;
+              await EditQuizController.loadData();
+              // EditQuizController.questions = quizPaperController.allPapers
+              //     .firstWhere((element) => model.id == element.id)
+              //     .questions;
+              // log('hallo: ${EditQuizController.questions?.length}');
+              Get.to(() => const BottomSheetEditWidget());
             },
           ),
         ],
@@ -50,9 +55,9 @@ class QuestionCardScreen extends GetView<QuizPaperController> {
           onPressed: ((context) {
             Get.dialog(
                 Dialogs.questionStartDialog(
-                    onTap: () {
+                    onTap: () async {
                       // paper: model, tryAgain: false);
-                      quizPaperController.deleteQuiz(docId: model.id);
+                      await EditQuizController.deleteQuiz(docId: model.id!);
                       Get.back();
                     },
                     cancelOnTap: () {
@@ -76,14 +81,14 @@ class QuestionCardScreen extends GetView<QuizPaperController> {
           color: Theme.of(context).cardColor,
         ),
         child: GestureDetector(
-          onTap: () async {
+          onTap: () {
             log('tapped');
             Phoenix.rebirth(context);
 
-            await quizPaperController.navigateToQuestions(
+            quizPaperController.navigateToQuestions(
                 paper: model, tryAgain: false);
           },
-          child: Padding(
+          child: Container(
             padding: const EdgeInsets.all(padding),
             child: Stack(clipBehavior: Clip.none, children: [
               Row(
@@ -115,12 +120,12 @@ class QuestionCardScreen extends GetView<QuizPaperController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          model.title,
+                          model.title!,
                           style: cartTitles(context),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10, bottom: 15),
-                          child: Text(model.description),
+                          child: Text(model.description!),
                         ),
                         Row(
                           children: [
@@ -187,5 +192,8 @@ class QuestionCardScreen extends GetView<QuizPaperController> {
         ),
       ),
     );
+    // : myZoomDraweController.user.value!.email != 'shqipdondrenica@gmail.com'
+    //     ? const SizedBox.shrink()
+    //     : const SizedBox.shrink();
   }
 }

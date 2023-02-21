@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_study_app/controllers/quiz_paper_controller.dart';
+import 'package:flutter_study_app/controllers/create_quiz_controller.dart';
 import 'package:flutter_study_app/widgets/text_form_field_widget.dart';
 import 'package:get/get.dart';
 
 import '../models/question_paper_model.dart';
 
+// ignore: must_be_immutable
 class BottomSheetCreateWidget extends StatefulWidget {
   BottomSheetCreateWidget({super.key, this.quiz});
 
@@ -16,7 +17,8 @@ class BottomSheetCreateWidget extends StatefulWidget {
 }
 
 class _BottomSheetCreateWidgetState extends State<BottomSheetCreateWidget> {
-  final quizPaperController = Get.find<QuizPaperController>();
+  final createQuizController =
+      Get.put<CreateQuizController>(CreateQuizController());
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -37,95 +39,141 @@ class _BottomSheetCreateWidgetState extends State<BottomSheetCreateWidget> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Plotesoni te dhenat per kuizin',
-                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.titleQuizController.value,
-                  hintText: 'Titulli i kuizit',
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.descriptionQuizController.value,
-                  hintText: 'Pershkrimi i kuizit',
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.imageQuizController.value,
-                  hintText: 'Foto e kuizit',
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.timeQuizController.value,
-                  hintText: 'Koha caktuar e kuizit (ne sekonda)',
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                        margin: const EdgeInsets.only(
-                          top: 20,
-                          bottom: 40,
-                        ),
-                        width: 110,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Get.theme.primaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextButton(
-                          child: const Text(
-                            'Krijo kuizin',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            quizPaperController.idOfQuiz++;
-                            quizPaperController.saveID();
-                            quizPaperController.createQuiz(
-                              description: quizPaperController
-                                  .descriptionQuizController.value.text,
-                              id: quizPaperController.idOfQuiz.toString(),
-                              imageUrl: quizPaperController
-                                  .imageQuizController.value.text,
-                              questionCount: 5,
-                              timeSeconds: int.parse(quizPaperController
-                                  .timeQuizController.value.text),
-                              title: quizPaperController
-                                  .titleQuizController.value.text,
-                            );
-                          },
-                        )),
-                  ],
+                Form(
+                  key: createQuizController.createQuizFormKey.value,
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Plotesoni te dhenat per kuizin',
+                        style: TextStyle(
+                            fontSize: 19, fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormFieldWidget(
+                        callBackClear: () {},
+                        callBackPrefix: () {},
+                        callBackSearch: () {},
+                        onChanged: (value) {},
+                        textEditingController:
+                            createQuizController.titleQuizController.value,
+                        hintText: 'Titulli i kuizit',
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Titulli nuk mund te jete i zbrazet';
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormFieldWidget(
+                        callBackClear: () {},
+                        callBackPrefix: () {},
+                        callBackSearch: () {},
+                        onChanged: (value) {},
+                        textEditingController: createQuizController
+                            .descriptionQuizController.value,
+                        hintText: 'Pershkrimi i kuizit',
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Pershkrimi nuk mund te jete i zbrazet';
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormFieldWidget(
+                        callBackClear: () {},
+                        callBackPrefix: () {},
+                        callBackSearch: () {},
+                        onChanged: (value) {},
+                        textEditingController:
+                            createQuizController.imageQuizController.value,
+                        hintText: 'Foto e kuizit',
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Foto nuk mund te jete zbrazet';
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormFieldWidget(
+                        callBackClear: () {},
+                        callBackPrefix: () {},
+                        callBackSearch: () {},
+                        onChanged: (value) {},
+                        textEditingController:
+                            createQuizController.timeQuizController.value,
+                        hintText: 'Koha caktuar e kuizit (ne sekonda)',
+                        validator: (value) {
+                          if (value.isEmpty ||
+                              !createQuizController.nrRegExp.hasMatch(value)) {
+                            return 'koha nuk mund te jete e zbrazet, te permbaj vetem nr';
+                          }
+                        },
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                              margin: const EdgeInsets.only(
+                                top: 20,
+                                bottom: 40,
+                              ),
+                              width:
+                                  createQuizController.createdQuiz.value == true
+                                      ? 150
+                                      : 110,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: createQuizController.createdQuiz.value ==
+                                        true
+                                    ? Colors.green
+                                    : Get.theme.primaryColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextButton(
+                                child: Text(
+                                  createQuizController.createdQuiz.value ==
+                                          false
+                                      ? 'Krijo kuizin'
+                                      : 'Kuizi eshte krijuar',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                onPressed: () {
+                                  if (createQuizController.createdQuiz.value ==
+                                      false) {
+                                    createQuizController.submit();
+                                    createQuizController.idOfQuiz++;
+                                    createQuizController.saveID();
+                                    createQuizController.createQuiz(
+                                      description: createQuizController
+                                          .descriptionQuizController.value.text,
+                                      id: createQuizController.idOfQuiz
+                                          .toString(),
+                                      imageUrl: createQuizController
+                                          .imageQuizController.value.text,
+                                      questionCount: 5,
+                                      timeSeconds: int.parse(
+                                          createQuizController
+                                              .timeQuizController.value.text),
+                                      title: createQuizController
+                                          .titleQuizController.value.text,
+                                    );
+                                  } else {
+                                    return;
+                                  }
+                                },
+                              )),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 const Text(
                   'Plotesoni pyetjet per kuizin',
@@ -134,814 +182,1068 @@ class _BottomSheetCreateWidgetState extends State<BottomSheetCreateWidget> {
                 const SizedBox(
                   height: 20,
                 ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.firstQuestionController.value,
-                  hintText: 'Shkruaj pytjen e pare',
-                  prefixText: '1:',
-                ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.firstCorrectAnswer.value,
-                  hintText: 'Cila eshte pergjigja e sakt',
-                ),
-                // TextFormFieldWidget(
 
-                //   callBackClear: () {},
-                //   callBackPrefix: () {},
-                //   callBackSearch: () {},
-                //   onChanged: (value) {},
-                //   textEditingController:
-                //       quizPaperController.idOfQuizController.value,
-                //   hintText: 'Shkruaj id e kuizit',
-                // ),
+                //first question
+                Form(
+                  key: createQuizController.createQuestion1FormKey.value,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TextFormFieldWidget(
+                        callBackClear: () {},
+                        callBackPrefix: () {},
+                        callBackSearch: () {},
+                        onChanged: (value) {},
+                        textEditingController:
+                            createQuizController.firstQuestionController.value,
+                        hintText: 'Shkruaj pytjen e pare',
+                        prefixText: '1:',
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Pyetja nuk mund te jete i zbrazet';
+                          }
+                        },
+                      ),
+                      TextFormFieldWidget(
+                        callBackClear: () {},
+                        callBackPrefix: () {},
+                        callBackSearch: () {},
+                        onChanged: (value) {},
+                        textEditingController:
+                            createQuizController.firstCorrectAnswer.value,
+                        hintText: 'Cila eshte pergjigja e sakt',
+                        validator: (value) {
+                          if (value.isEmpty || value.length != 1) {
+                            return 'Pergjigja e sakt nuk mund te jete i zbrazet, dhe duhet te permbaj vetem 1';
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormFieldWidget(
+                              callBackClear: () {},
+                              callBackPrefix: () {},
+                              callBackSearch: () {},
+                              onChanged: (value) {},
+                              textEditingController: createQuizController
+                                  .firstAnswerControllerA.value,
+                              hintText: 'Shkruaj pergjigjen',
+                              prefixText: 'A:',
+                              validator: (value) {},
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: TextFormFieldWidget(
+                              callBackClear: () {},
+                              callBackPrefix: () {},
+                              callBackSearch: () {},
+                              onChanged: (value) {},
+                              textEditingController: createQuizController
+                                  .firstAnswerControllerB.value,
+                              hintText: 'Shkruaj pergjigjen',
+                              prefixText: 'B:',
+                              validator: (value) {},
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormFieldWidget(
+                              callBackClear: () {},
+                              callBackPrefix: () {},
+                              callBackSearch: () {},
+                              onChanged: (value) {},
+                              textEditingController: createQuizController
+                                  .firstAnswerControllerC.value,
+                              hintText: 'Shkruaj pergjigjen',
+                              prefixText: 'C:',
+                              validator: (value) {},
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: TextFormFieldWidget(
+                              callBackClear: () {},
+                              callBackPrefix: () {},
+                              callBackSearch: () {},
+                              onChanged: (value) {},
+                              textEditingController: createQuizController
+                                  .firstAnswerControllerD.value,
+                              hintText: 'Shkruaj pergjigjen',
+                              prefixText: 'D:',
+                              validator: (value) {},
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                          margin: const EdgeInsets.only(
+                            top: 20,
+                            bottom: 40,
+                          ),
+                          width: createQuizController.firstQuestionCreated.value
+                              ? 150
+                              : 110,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color:
+                                createQuizController.firstQuestionCreated.value
+                                    ? Colors.green
+                                    : Get.theme.primaryColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextButton(
+                            child: Text(
+                              createQuizController.firstQuestionCreated.value
+                                  ? 'Pyetja eshte krijuar'
+                                  : 'Krijo pytjen',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () {
+                              if (createQuizController
+                                      .firstQuestionCreated.value ==
+                                  false) {
+                                createQuizController.submitQuestion1();
+                                createQuizController.idOfQuestion++;
+                                createQuizController.saveQuestionId();
+                                createQuizController.createQuestion(
+                                  id: createQuizController.idOfQuestion
+                                      .toString(),
+                                  correctAnswer: createQuizController
+                                      .firstCorrectAnswer.value.text
+                                      .toUpperCase(),
+                                  question: createQuizController
+                                      .firstQuestionController.value.text,
+                                );
+                                createQuizController.createAnswerA(
+                                    answer: createQuizController
+                                        .firstAnswerControllerA.value.text,
+                                    identifier: createQuizController
+                                                .firstAnswerControllerA
+                                                .value
+                                                .text ==
+                                            createQuizController
+                                                .firstAnswerControllerA
+                                                .value
+                                                .text
+                                        ? 'A'
+                                        : 'j');
+                                createQuizController.createAnswerB(
+                                    answer: createQuizController
+                                        .firstAnswerControllerB.value.text,
+                                    identifier: createQuizController
+                                                .firstAnswerControllerB
+                                                .value
+                                                .text ==
+                                            createQuizController
+                                                .firstAnswerControllerB
+                                                .value
+                                                .text
+                                        ? 'B'
+                                        : 'j');
+                                createQuizController.createAnswerC(
+                                    answer: createQuizController
+                                        .firstAnswerControllerC.value.text,
+                                    identifier: createQuizController
+                                                .firstAnswerControllerC
+                                                .value
+                                                .text ==
+                                            createQuizController
+                                                .firstAnswerControllerC
+                                                .value
+                                                .text
+                                        ? 'C'
+                                        : 'j');
+                                createQuizController.createAnswerD(
+                                    answer: createQuizController
+                                        .firstAnswerControllerD.value.text,
+                                    identifier: createQuizController
+                                                .firstAnswerControllerD
+                                                .value
+                                                .text ==
+                                            createQuizController
+                                                .firstAnswerControllerD
+                                                .value
+                                                .text
+                                        ? 'D'
+                                        : 'j');
+                              }
+                            },
+                          )),
+                    ],
+                  ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormFieldWidget(
+                Form(
+                  key: createQuizController.createQuestion2FormKey.value,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TextFormFieldWidget(
                         callBackClear: () {},
                         callBackPrefix: () {},
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.firstAnswerControllerA.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'A:',
+                            createQuizController.secondQuestionController.value,
+                        hintText: 'Shkruaj pyetjen e dyt',
+                        prefixText: '2:',
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Pyetja nuk mund te jete i zbrazet';
+                          }
+                        },
                       ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormFieldWidget(
+                      TextFormFieldWidget(
                         callBackClear: () {},
                         callBackPrefix: () {},
                         callBackSearch: () {},
                         onChanged: (value) {},
                         textEditingController:
-                            quizPaperController.firstAnswerControllerB.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'B:',
+                            createQuizController.secondCorrectAnswer.value,
+                        hintText: 'Cila eshte pergjigja e sakt',
+                        validator: (value) {
+                          if (value.isEmpty || value.length != 1) {
+                            return 'Pergjigja e sakt nuk mund te jete i zbrazet, dhe duhet te permbaj vetem 1';
+                          }
+                        },
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.firstAnswerControllerC.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'C:',
+                      const SizedBox(
+                        height: 20,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.firstAnswerControllerD.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'D:',
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormFieldWidget(
+                              callBackClear: () {},
+                              callBackPrefix: () {},
+                              callBackSearch: () {},
+                              onChanged: (value) {},
+                              textEditingController: createQuizController
+                                  .secondAnswerControllerA.value,
+                              hintText: 'Shkruaj pergjigjen',
+                              prefixText: 'A:',
+                              validator: (value) {},
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: TextFormFieldWidget(
+                              callBackClear: () {},
+                              callBackPrefix: () {},
+                              callBackSearch: () {},
+                              onChanged: (value) {},
+                              textEditingController: createQuizController
+                                  .secondAnswerControllerB.value,
+                              hintText: 'Shkruaj pergjigjen',
+                              prefixText: 'B:',
+                              validator: (value) {},
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                Container(
-                    margin: const EdgeInsets.only(
-                      top: 20,
-                      bottom: 40,
-                      left: 230,
-                    ),
-                    width: 110,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Get.theme.primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextButton(
-                      child: const Text(
-                        'Krijo pytjen',
-                        style: TextStyle(color: Colors.white),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormFieldWidget(
+                              callBackClear: () {},
+                              callBackPrefix: () {},
+                              callBackSearch: () {},
+                              onChanged: (value) {},
+                              textEditingController: createQuizController
+                                  .secondAnswerControllerC.value,
+                              hintText: 'Shkruaj pergjigjen',
+                              prefixText: 'C:',
+                              validator: (value) {},
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: TextFormFieldWidget(
+                              callBackClear: () {},
+                              callBackPrefix: () {},
+                              callBackSearch: () {},
+                              onChanged: (value) {},
+                              textEditingController: createQuizController
+                                  .secondAnswerControllerD.value,
+                              hintText: 'Shkruaj pergjigjen',
+                              prefixText: 'D:',
+                              validator: (value) {},
+                            ),
+                          ),
+                        ],
                       ),
-                      onPressed: () {
-                        quizPaperController.idOfQuestion++;
-                        quizPaperController.saveQuestionId();
-                        quizPaperController.createQuestion(
-                          id: quizPaperController.idOfQuestion.toString(),
-                          correctAnswer: quizPaperController
-                              .firstCorrectAnswer.value.text
-                              .toUpperCase(),
-                          question: quizPaperController
-                              .firstQuestionController.value.text,
-                        );
-                        quizPaperController.createAnswerA(
-                            answer: quizPaperController
-                                .firstAnswerControllerA.value.text,
-                            identifier: quizPaperController
-                                        .firstAnswerControllerA.value.text ==
-                                    quizPaperController
-                                        .firstAnswerControllerA.value.text
-                                ? 'A'
-                                : 'j');
-                        quizPaperController.createAnswerB(
-                            answer: quizPaperController
-                                .firstAnswerControllerB.value.text,
-                            identifier: quizPaperController
-                                        .firstAnswerControllerB.value.text ==
-                                    quizPaperController
-                                        .firstAnswerControllerB.value.text
-                                ? 'B'
-                                : 'j');
-                        quizPaperController.createAnswerC(
-                            answer: quizPaperController
-                                .firstAnswerControllerC.value.text,
-                            identifier: quizPaperController
-                                        .firstAnswerControllerC.value.text ==
-                                    quizPaperController
-                                        .firstAnswerControllerC.value.text
-                                ? 'C'
-                                : 'j');
-                        quizPaperController.createAnswerD(
-                            answer: quizPaperController
-                                .firstAnswerControllerD.value.text,
-                            identifier: quizPaperController
-                                        .firstAnswerControllerD.value.text ==
-                                    quizPaperController
-                                        .firstAnswerControllerD.value.text
-                                ? 'D'
-                                : 'j');
-                        // quizPaperController.createAnswers();
-                      },
-                    )),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.secondQuestionController.value,
-                  hintText: 'Shkruaj pyetjen e dyt',
-                  prefixText: '2:',
-                ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.secondCorrectAnswer.value,
-                  hintText: 'Cila eshte pergjigja e sakt',
-                ),
-                // TextFormFieldWidget(
-
-                //   callBackClear: () {},
-                //   callBackPrefix: () {},
-                //   callBackSearch: () {},
-                //   onChanged: (value) {},
-                //   textEditingController:
-                //       quizPaperController.idOfQuizController.value,
-                //   hintText: 'Shkruaj id e kuizit',
-                // ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.secondAnswerControllerA.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'A:',
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.secondAnswerControllerB.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'B:',
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.secondAnswerControllerC.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'C:',
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.secondAnswerControllerD.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'D:',
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                    margin: const EdgeInsets.only(
-                      top: 20,
-                      bottom: 40,
-                      left: 230,
-                    ),
-                    width: 110,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Get.theme.primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextButton(
-                      child: const Text(
-                        'Krijo pytjen',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        quizPaperController.idOfQuestion++;
-                        quizPaperController.saveQuestionId();
-                        quizPaperController.createQuestion(
-                          id: quizPaperController.idOfQuestion.toString(),
-                          correctAnswer: quizPaperController
-                              .secondCorrectAnswer.value.text
-                              .toUpperCase(),
-                          question: quizPaperController
-                              .secondQuestionController.value.text,
-                        );
-                        quizPaperController.createAnswerA(
-                            answer: quizPaperController
-                                .secondAnswerControllerA.value.text,
-                            identifier: quizPaperController
-                                        .secondAnswerControllerA.value.text ==
-                                    quizPaperController
-                                        .secondAnswerControllerA.value.text
-                                ? 'A'
-                                : 'j');
-                        quizPaperController.createAnswerB(
-                            answer: quizPaperController
-                                .secondAnswerControllerB.value.text,
-                            identifier: quizPaperController
-                                        .secondAnswerControllerB.value.text ==
-                                    quizPaperController
-                                        .secondAnswerControllerB.value.text
-                                ? 'B'
-                                : 'j');
-                        quizPaperController.createAnswerC(
-                            answer: quizPaperController
-                                .secondAnswerControllerC.value.text,
-                            identifier: quizPaperController
-                                        .secondAnswerControllerC.value.text ==
-                                    quizPaperController
-                                        .secondAnswerControllerC.value.text
-                                ? 'C'
-                                : 'j');
-                        quizPaperController.createAnswerD(
-                            answer: quizPaperController
-                                .secondAnswerControllerD.value.text,
-                            identifier: quizPaperController
-                                        .secondAnswerControllerD.value.text ==
-                                    quizPaperController
-                                        .secondAnswerControllerD.value.text
-                                ? 'D'
-                                : 'j');
-                        // quizPaperController.createAnswers();
-                      },
-                    )),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.thirdQuestionController.value,
-                  hintText: 'Shkruaj pytjen e tret',
-                  prefixText: '3:',
-                ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.thirdCorrectAnswer.value,
-                  hintText: 'Cila eshte pergjigja e sakt',
-                ),
-                // TextFormFieldWidget(
-
-                //   callBackClear: () {},
-                //   callBackPrefix: () {},
-                //   callBackSearch: () {},
-                //   onChanged: (value) {},
-                //   textEditingController:
-                //       quizPaperController.idOfQuizController.value,
-                //   hintText: 'Shkruaj id e kuizit',
-                // ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.thirdAnswerControllerA.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'A:',
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.thirdAnswerControllerB.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'B:',
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.thirdAnswerControllerC.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'C:',
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.thirdAnswerControllerD.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'D:',
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                    margin: const EdgeInsets.only(
-                      top: 20,
-                      bottom: 40,
-                      left: 230,
-                    ),
-                    width: 110,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Get.theme.primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextButton(
-                      child: const Text(
-                        'Krijo pytjen',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        quizPaperController.idOfQuestion++;
-                        quizPaperController.saveQuestionId();
-                        quizPaperController.createQuestion(
-                          id: quizPaperController.idOfQuestion.toString(),
-                          correctAnswer: quizPaperController
-                              .thirdCorrectAnswer.value.text
-                              .toUpperCase(),
-                          question: quizPaperController
-                              .thirdQuestionController.value.text,
-                        );
-                        quizPaperController.createAnswerA(
-                            answer: quizPaperController
-                                .thirdAnswerControllerA.value.text,
-                            identifier: quizPaperController
-                                        .thirdAnswerControllerA.value.text ==
-                                    quizPaperController
-                                        .thirdAnswerControllerA.value.text
-                                ? 'A'
-                                : 'j');
-                        quizPaperController.createAnswerB(
-                            answer: quizPaperController
-                                .thirdAnswerControllerB.value.text,
-                            identifier: quizPaperController
-                                        .thirdAnswerControllerB.value.text ==
-                                    quizPaperController
-                                        .thirdAnswerControllerB.value.text
-                                ? 'B'
-                                : 'j');
-                        quizPaperController.createAnswerC(
-                            answer: quizPaperController
-                                .thirdAnswerControllerC.value.text,
-                            identifier: quizPaperController
-                                        .thirdAnswerControllerC.value.text ==
-                                    quizPaperController
-                                        .thirdAnswerControllerC.value.text
-                                ? 'C'
-                                : 'j');
-                        quizPaperController.createAnswerD(
-                            answer: quizPaperController
-                                .thirdAnswerControllerD.value.text,
-                            identifier: quizPaperController
-                                        .thirdAnswerControllerD.value.text ==
-                                    quizPaperController
-                                        .thirdAnswerControllerD.value.text
-                                ? 'D'
-                                : 'j');
-                        // quizPaperController.createAnswers();
-                      },
-                    )),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.fourthQuestionController.value,
-                  hintText: 'Shkruaj pytjen e katert',
-                  prefixText: '4:',
-                ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.fourthCorrectAnswer.value,
-                  hintText: 'Cila eshte pergjigja e sakt',
-                ),
-                // TextFormFieldWidget(
-
-                //   callBackClear: () {},
-                //   callBackPrefix: () {},
-                //   callBackSearch: () {},
-                //   onChanged: (value) {},
-                //   textEditingController:
-                //       quizPaperController.idOfQuizController.value,
-                //   hintText: 'Shkruaj id e kuizit',
-                // ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.fourthAnswerControllerA.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'A:',
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.fourthAnswerControllerB.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'B:',
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.fourthAnswerControllerC.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'C:',
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.fourthAnswerControllerD.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'D:',
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                    margin: const EdgeInsets.only(
-                      top: 20,
-                      bottom: 40,
-                      left: 230,
-                    ),
-                    width: 110,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Get.theme.primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextButton(
-                      child: const Text(
-                        'Krijo pytjen',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        quizPaperController.idOfQuestion++;
-                        quizPaperController.saveQuestionId();
-                        quizPaperController.createQuestion(
-                          id: quizPaperController.idOfQuestion.toString(),
-                          correctAnswer: quizPaperController
-                              .fourthCorrectAnswer.value.text
-                              .toUpperCase(),
-                          question: quizPaperController
-                              .fourthQuestionController.value.text,
-                        );
-                        quizPaperController.createAnswerA(
-                            answer: quizPaperController
-                                .fourthAnswerControllerA.value.text,
-                            identifier: quizPaperController
-                                        .fourthAnswerControllerA.value.text ==
-                                    quizPaperController
-                                        .fourthAnswerControllerA.value.text
-                                ? 'A'
-                                : 'j');
-                        quizPaperController.createAnswerB(
-                            answer: quizPaperController
-                                .fourthAnswerControllerB.value.text,
-                            identifier: quizPaperController
-                                        .fourthAnswerControllerB.value.text ==
-                                    quizPaperController
-                                        .fourthAnswerControllerB.value.text
-                                ? 'B'
-                                : 'j');
-                        quizPaperController.createAnswerC(
-                            answer: quizPaperController
-                                .fourthAnswerControllerC.value.text,
-                            identifier: quizPaperController
-                                        .fourthAnswerControllerC.value.text ==
-                                    quizPaperController
-                                        .fourthAnswerControllerC.value.text
-                                ? 'C'
-                                : 'j');
-                        quizPaperController.createAnswerD(
-                            answer: quizPaperController
-                                .fourthAnswerControllerD.value.text,
-                            identifier: quizPaperController
-                                        .fourthAnswerControllerD.value.text ==
-                                    quizPaperController
-                                        .fourthAnswerControllerD.value.text
-                                ? 'D'
-                                : 'j');
-                        // quizPaperController.createAnswers();
-                      },
-                    )),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.fifthQuestionController.value,
-                  hintText: 'Shkruaj pytjen e peste',
-                  prefixText: '5:',
-                ),
-                TextFormFieldWidget(
-                  callBackClear: () {},
-                  callBackPrefix: () {},
-                  callBackSearch: () {},
-                  onChanged: (value) {},
-                  textEditingController:
-                      quizPaperController.fifthCorrectAnswer.value,
-                  hintText: 'Cila eshte pergjigja e sakt',
+                      Container(
+                          margin: const EdgeInsets.only(
+                            top: 20,
+                            bottom: 40,
+                          ),
+                          width:
+                              createQuizController.secondQuestionCreated.value
+                                  ? 150
+                                  : 110,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color:
+                                createQuizController.secondQuestionCreated.value
+                                    ? Colors.green
+                                    : Get.theme.primaryColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextButton(
+                            child: Text(
+                              createQuizController.secondQuestionCreated.value
+                                  ? 'Pyetja eshte krijuar'
+                                  : 'Krijo pytjen',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () {
+                              if (createQuizController
+                                      .secondQuestionCreated.value ==
+                                  false) {
+                                createQuizController.submitQuestion2();
+                                createQuizController.idOfQuestion++;
+                                createQuizController.saveQuestionId();
+                                createQuizController.createQuestion(
+                                  id: createQuizController.idOfQuestion
+                                      .toString(),
+                                  correctAnswer: createQuizController
+                                      .secondCorrectAnswer.value.text
+                                      .toUpperCase(),
+                                  question: createQuizController
+                                      .secondQuestionController.value.text,
+                                );
+                                createQuizController.createAnswerA(
+                                    answer: createQuizController
+                                        .secondAnswerControllerA.value.text,
+                                    identifier: createQuizController
+                                                .secondAnswerControllerA
+                                                .value
+                                                .text ==
+                                            createQuizController
+                                                .secondAnswerControllerA
+                                                .value
+                                                .text
+                                        ? 'A'
+                                        : 'j');
+                                createQuizController.createAnswerB(
+                                    answer: createQuizController
+                                        .secondAnswerControllerB.value.text,
+                                    identifier: createQuizController
+                                                .secondAnswerControllerB
+                                                .value
+                                                .text ==
+                                            createQuizController
+                                                .secondAnswerControllerB
+                                                .value
+                                                .text
+                                        ? 'B'
+                                        : 'j');
+                                createQuizController.createAnswerC(
+                                    answer: createQuizController
+                                        .secondAnswerControllerC.value.text,
+                                    identifier: createQuizController
+                                                .secondAnswerControllerC
+                                                .value
+                                                .text ==
+                                            createQuizController
+                                                .secondAnswerControllerC
+                                                .value
+                                                .text
+                                        ? 'C'
+                                        : 'j');
+                                createQuizController.createAnswerD(
+                                    answer: createQuizController
+                                        .secondAnswerControllerD.value.text,
+                                    identifier: createQuizController
+                                                .secondAnswerControllerD
+                                                .value
+                                                .text ==
+                                            createQuizController
+                                                .secondAnswerControllerD
+                                                .value
+                                                .text
+                                        ? 'D'
+                                        : 'j');
+                              }
+                            },
+                          )),
+                    ],
+                  ),
                 ),
 
                 const SizedBox(
                   height: 20,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.fifthAnswerControllerA.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'A:',
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.fifthAnswerControllerB.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'B:',
-                      ),
-                    ),
-                  ],
+                Form(
+                    key: createQuizController.createQuestion3FormKey.value,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        TextFormFieldWidget(
+                          callBackClear: () {},
+                          callBackPrefix: () {},
+                          callBackSearch: () {},
+                          onChanged: (value) {},
+                          textEditingController: createQuizController
+                              .thirdQuestionController.value,
+                          hintText: 'Shkruaj pytjen e tret',
+                          prefixText: '3:',
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Pyetja nuk mund te jete i zbrazet';
+                            }
+                          },
+                        ),
+                        TextFormFieldWidget(
+                          callBackClear: () {},
+                          callBackPrefix: () {},
+                          callBackSearch: () {},
+                          onChanged: (value) {},
+                          textEditingController:
+                              createQuizController.thirdCorrectAnswer.value,
+                          hintText: 'Cila eshte pergjigja e sakt',
+                          validator: (value) {
+                            if (value.isEmpty || value.length != 1) {
+                              return 'Pergjigja e sakt nuk mund te jete i zbrazet, dhe duhet te permbaj vetem 1';
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormFieldWidget(
+                                callBackClear: () {},
+                                callBackPrefix: () {},
+                                callBackSearch: () {},
+                                onChanged: (value) {},
+                                textEditingController: createQuizController
+                                    .thirdAnswerControllerA.value,
+                                hintText: 'Shkruaj pergjigjen',
+                                prefixText: 'A:',
+                                validator: (value) {},
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: TextFormFieldWidget(
+                                callBackClear: () {},
+                                callBackPrefix: () {},
+                                callBackSearch: () {},
+                                onChanged: (value) {},
+                                textEditingController: createQuizController
+                                    .thirdAnswerControllerB.value,
+                                hintText: 'Shkruaj pergjigjen',
+                                prefixText: 'B:',
+                                validator: (value) {},
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormFieldWidget(
+                                callBackClear: () {},
+                                callBackPrefix: () {},
+                                callBackSearch: () {},
+                                onChanged: (value) {},
+                                textEditingController: createQuizController
+                                    .thirdAnswerControllerC.value,
+                                hintText: 'Shkruaj pergjigjen',
+                                prefixText: 'C:',
+                                validator: (value) {},
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: TextFormFieldWidget(
+                                callBackClear: () {},
+                                callBackPrefix: () {},
+                                callBackSearch: () {},
+                                onChanged: (value) {},
+                                textEditingController: createQuizController
+                                    .thirdAnswerControllerD.value,
+                                hintText: 'Shkruaj pergjigjen',
+                                prefixText: 'D:',
+                                validator: (value) {},
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                            margin: const EdgeInsets.only(
+                              top: 20,
+                              bottom: 40,
+                            ),
+                            width:
+                                createQuizController.thirdQuestionCreated.value
+                                    ? 150
+                                    : 110,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: createQuizController
+                                      .thirdQuestionCreated.value
+                                  ? Colors.green
+                                  : Get.theme.primaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: TextButton(
+                              child: Text(
+                                createQuizController.thirdQuestionCreated.value
+                                    ? 'Pyetja eshte krijuar'
+                                    : 'Krijo pytjen',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () {
+                                if (createQuizController
+                                        .thirdQuestionCreated.value ==
+                                    false) {
+                                  createQuizController.submitQuestion3();
+                                  createQuizController.idOfQuestion++;
+                                  createQuizController.saveQuestionId();
+                                  createQuizController.createQuestion(
+                                    id: createQuizController.idOfQuestion
+                                        .toString(),
+                                    correctAnswer: createQuizController
+                                        .thirdCorrectAnswer.value.text
+                                        .toUpperCase(),
+                                    question: createQuizController
+                                        .thirdQuestionController.value.text,
+                                  );
+                                  createQuizController.createAnswerA(
+                                      answer: createQuizController
+                                          .thirdAnswerControllerA.value.text,
+                                      identifier: createQuizController
+                                                  .thirdAnswerControllerA
+                                                  .value
+                                                  .text ==
+                                              createQuizController
+                                                  .thirdAnswerControllerA
+                                                  .value
+                                                  .text
+                                          ? 'A'
+                                          : 'j');
+                                  createQuizController.createAnswerB(
+                                      answer: createQuizController
+                                          .thirdAnswerControllerB.value.text,
+                                      identifier: createQuizController
+                                                  .thirdAnswerControllerB
+                                                  .value
+                                                  .text ==
+                                              createQuizController
+                                                  .thirdAnswerControllerB
+                                                  .value
+                                                  .text
+                                          ? 'B'
+                                          : 'j');
+                                  createQuizController.createAnswerC(
+                                      answer: createQuizController
+                                          .thirdAnswerControllerC.value.text,
+                                      identifier: createQuizController
+                                                  .thirdAnswerControllerC
+                                                  .value
+                                                  .text ==
+                                              createQuizController
+                                                  .thirdAnswerControllerC
+                                                  .value
+                                                  .text
+                                          ? 'C'
+                                          : 'j');
+                                  createQuizController.createAnswerD(
+                                      answer: createQuizController
+                                          .thirdAnswerControllerD.value.text,
+                                      identifier: createQuizController
+                                                  .thirdAnswerControllerD
+                                                  .value
+                                                  .text ==
+                                              createQuizController
+                                                  .thirdAnswerControllerD
+                                                  .value
+                                                  .text
+                                          ? 'D'
+                                          : 'j');
+                                }
+                              },
+                            )),
+                      ],
+                    )),
+
+                const SizedBox(
+                  height: 20,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.fifthAnswerControllerC.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'C:',
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormFieldWidget(
-                        callBackClear: () {},
-                        callBackPrefix: () {},
-                        callBackSearch: () {},
-                        onChanged: (value) {},
-                        textEditingController:
-                            quizPaperController.fifthAnswerControllerD.value,
-                        hintText: 'Shkruaj pergjigjen',
-                        prefixText: 'D:',
-                      ),
-                    ),
-                  ],
+
+                Form(
+                    key: createQuizController.createQuestion4FormKey.value,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        TextFormFieldWidget(
+                          callBackClear: () {},
+                          callBackPrefix: () {},
+                          callBackSearch: () {},
+                          onChanged: (value) {},
+                          textEditingController: createQuizController
+                              .fourthQuestionController.value,
+                          hintText: 'Shkruaj pytjen e katert',
+                          prefixText: '4:',
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Pyetja nuk mund te jete i zbrazet';
+                            }
+                          },
+                        ),
+                        TextFormFieldWidget(
+                          callBackClear: () {},
+                          callBackPrefix: () {},
+                          callBackSearch: () {},
+                          onChanged: (value) {},
+                          textEditingController:
+                              createQuizController.fourthCorrectAnswer.value,
+                          hintText: 'Cila eshte pergjigja e sakt',
+                          validator: (value) {
+                            if (value.isEmpty || value.length != 1) {
+                              return 'Pergjigja e sakt nuk mund te jete i zbrazet, dhe duhet te permbaj vetem 1';
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormFieldWidget(
+                                callBackClear: () {},
+                                callBackPrefix: () {},
+                                callBackSearch: () {},
+                                onChanged: (value) {},
+                                textEditingController: createQuizController
+                                    .fourthAnswerControllerA.value,
+                                hintText: 'Shkruaj pergjigjen',
+                                prefixText: 'A:',
+                                validator: (value) {},
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: TextFormFieldWidget(
+                                callBackClear: () {},
+                                callBackPrefix: () {},
+                                callBackSearch: () {},
+                                onChanged: (value) {},
+                                textEditingController: createQuizController
+                                    .fourthAnswerControllerB.value,
+                                hintText: 'Shkruaj pergjigjen',
+                                prefixText: 'B:',
+                                validator: (value) {},
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormFieldWidget(
+                                callBackClear: () {},
+                                callBackPrefix: () {},
+                                callBackSearch: () {},
+                                onChanged: (value) {},
+                                textEditingController: createQuizController
+                                    .fourthAnswerControllerC.value,
+                                hintText: 'Shkruaj pergjigjen',
+                                prefixText: 'C:',
+                                validator: (value) {},
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: TextFormFieldWidget(
+                                callBackClear: () {},
+                                callBackPrefix: () {},
+                                callBackSearch: () {},
+                                onChanged: (value) {},
+                                textEditingController: createQuizController
+                                    .fourthAnswerControllerD.value,
+                                hintText: 'Shkruaj pergjigjen',
+                                prefixText: 'D:',
+                                validator: (value) {},
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                            margin: const EdgeInsets.only(
+                              top: 20,
+                              bottom: 40,
+                            ),
+                            width:
+                                createQuizController.fourthQuestionCreated.value
+                                    ? 150
+                                    : 110,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: createQuizController
+                                      .fourthQuestionCreated.value
+                                  ? Colors.green
+                                  : Get.theme.primaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: TextButton(
+                              child: Text(
+                                createQuizController.fourthQuestionCreated.value
+                                    ? 'Pyetja eshte krijuar'
+                                    : 'Krijo pytjen',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () {
+                                if (createQuizController
+                                        .fourthQuestionCreated.value ==
+                                    false) {
+                                  createQuizController.submitQuestion4();
+                                  createQuizController.idOfQuestion++;
+                                  createQuizController.saveQuestionId();
+                                  createQuizController.createQuestion(
+                                    id: createQuizController.idOfQuestion
+                                        .toString(),
+                                    correctAnswer: createQuizController
+                                        .fourthCorrectAnswer.value.text
+                                        .toUpperCase(),
+                                    question: createQuizController
+                                        .fourthQuestionController.value.text,
+                                  );
+                                  createQuizController.createAnswerA(
+                                      answer: createQuizController
+                                          .fourthAnswerControllerA.value.text,
+                                      identifier: createQuizController
+                                                  .fourthAnswerControllerA
+                                                  .value
+                                                  .text ==
+                                              createQuizController
+                                                  .fourthAnswerControllerA
+                                                  .value
+                                                  .text
+                                          ? 'A'
+                                          : 'j');
+                                  createQuizController.createAnswerB(
+                                      answer: createQuizController
+                                          .fourthAnswerControllerB.value.text,
+                                      identifier: createQuizController
+                                                  .fourthAnswerControllerB
+                                                  .value
+                                                  .text ==
+                                              createQuizController
+                                                  .fourthAnswerControllerB
+                                                  .value
+                                                  .text
+                                          ? 'B'
+                                          : 'j');
+                                  createQuizController.createAnswerC(
+                                      answer: createQuizController
+                                          .fourthAnswerControllerC.value.text,
+                                      identifier: createQuizController
+                                                  .fourthAnswerControllerC
+                                                  .value
+                                                  .text ==
+                                              createQuizController
+                                                  .fourthAnswerControllerC
+                                                  .value
+                                                  .text
+                                          ? 'C'
+                                          : 'j');
+                                  createQuizController.createAnswerD(
+                                      answer: createQuizController
+                                          .fourthAnswerControllerD.value.text,
+                                      identifier: createQuizController
+                                                  .fourthAnswerControllerD
+                                                  .value
+                                                  .text ==
+                                              createQuizController
+                                                  .fourthAnswerControllerD
+                                                  .value
+                                                  .text
+                                          ? 'D'
+                                          : 'j');
+                                }
+                              },
+                            )),
+                      ],
+                    )),
+
+                const SizedBox(
+                  height: 20,
+                ),
+                Form(
+                    key: createQuizController.createQuestion5FormKey.value,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        TextFormFieldWidget(
+                          callBackClear: () {},
+                          callBackPrefix: () {},
+                          callBackSearch: () {},
+                          onChanged: (value) {},
+                          textEditingController: createQuizController
+                              .fifthQuestionController.value,
+                          hintText: 'Shkruaj pytjen e peste',
+                          prefixText: '5:',
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Pyetja nuk mund te jete i zbrazet';
+                            }
+                          },
+                        ),
+                        TextFormFieldWidget(
+                          callBackClear: () {},
+                          callBackPrefix: () {},
+                          callBackSearch: () {},
+                          onChanged: (value) {},
+                          textEditingController:
+                              createQuizController.fifthCorrectAnswer.value,
+                          hintText: 'Cila eshte pergjigja e sakt',
+                          validator: (value) {
+                            if (value.isEmpty || value.length != 1) {
+                              return 'Pergjigja e sakt nuk mund te jete i zbrazet, dhe duhet te permbaj vetem 1';
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormFieldWidget(
+                                callBackClear: () {},
+                                callBackPrefix: () {},
+                                callBackSearch: () {},
+                                onChanged: (value) {},
+                                textEditingController: createQuizController
+                                    .fifthAnswerControllerA.value,
+                                hintText: 'Shkruaj pergjigjen',
+                                prefixText: 'A:',
+                                validator: (value) {},
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: TextFormFieldWidget(
+                                callBackClear: () {},
+                                callBackPrefix: () {},
+                                callBackSearch: () {},
+                                onChanged: (value) {},
+                                textEditingController: createQuizController
+                                    .fifthAnswerControllerB.value,
+                                hintText: 'Shkruaj pergjigjen',
+                                prefixText: 'B:',
+                                validator: (value) {},
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormFieldWidget(
+                                callBackClear: () {},
+                                callBackPrefix: () {},
+                                callBackSearch: () {},
+                                onChanged: (value) {},
+                                textEditingController: createQuizController
+                                    .fifthAnswerControllerC.value,
+                                hintText: 'Shkruaj pergjigjen',
+                                prefixText: 'C:',
+                                validator: (value) {},
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: TextFormFieldWidget(
+                                callBackClear: () {},
+                                callBackPrefix: () {},
+                                callBackSearch: () {},
+                                onChanged: (value) {},
+                                textEditingController: createQuizController
+                                    .fifthAnswerControllerD.value,
+                                hintText: 'Shkruaj pergjigjen',
+                                prefixText: 'D:',
+                                validator: (value) {},
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                            margin: const EdgeInsets.only(
+                              top: 20,
+                              bottom: 40,
+                            ),
+                            width:
+                                createQuizController.fifthQuestionCreated.value
+                                    ? 150
+                                    : 110,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: createQuizController
+                                      .fifthQuestionCreated.value
+                                  ? Colors.green
+                                  : Get.theme.primaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: TextButton(
+                              child: Text(
+                                createQuizController.fifthQuestionCreated.value
+                                    ? 'Pyetja eshte krijuar'
+                                    : 'Krijo pytjen',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () {
+                                if (createQuizController
+                                        .fifthQuestionCreated.value ==
+                                    false) {
+                                  createQuizController.submitQuestion5();
+                                  createQuizController.idOfQuestion++;
+                                  createQuizController.saveQuestionId();
+                                  createQuizController.createQuestion(
+                                    id: createQuizController.idOfQuestion
+                                        .toString(),
+                                    correctAnswer: createQuizController
+                                        .fifthCorrectAnswer.value.text
+                                        .toUpperCase(),
+                                    question: createQuizController
+                                        .fifthQuestionController.value.text,
+                                  );
+                                  createQuizController.createAnswerA(
+                                      answer: createQuizController
+                                          .fifthAnswerControllerA.value.text,
+                                      identifier: createQuizController
+                                                  .fifthAnswerControllerA
+                                                  .value
+                                                  .text ==
+                                              createQuizController
+                                                  .fifthAnswerControllerA
+                                                  .value
+                                                  .text
+                                          ? 'A'
+                                          : 'j');
+                                  createQuizController.createAnswerB(
+                                      answer: createQuizController
+                                          .fifthAnswerControllerB.value.text,
+                                      identifier: createQuizController
+                                                  .fifthAnswerControllerB
+                                                  .value
+                                                  .text ==
+                                              createQuizController
+                                                  .fifthAnswerControllerB
+                                                  .value
+                                                  .text
+                                          ? 'B'
+                                          : 'j');
+                                  createQuizController.createAnswerC(
+                                      answer: createQuizController
+                                          .fifthAnswerControllerC.value.text,
+                                      identifier: createQuizController
+                                                  .fifthAnswerControllerC
+                                                  .value
+                                                  .text ==
+                                              createQuizController
+                                                  .fifthAnswerControllerC
+                                                  .value
+                                                  .text
+                                          ? 'C'
+                                          : 'j');
+                                  createQuizController.createAnswerD(
+                                      answer: createQuizController
+                                          .fifthAnswerControllerD.value.text,
+                                      identifier: createQuizController
+                                                  .fifthAnswerControllerD
+                                                  .value
+                                                  .text ==
+                                              createQuizController
+                                                  .fifthAnswerControllerD
+                                                  .value
+                                                  .text
+                                          ? 'D'
+                                          : 'j');
+                                }
+                              },
+                            )),
+                      ],
+                    )),
+                Center(
+                  child: createQuizController.allQuizPaperCreated.value
+                      ? const Text(
+                          'Duhet plotesuar te gjitha te dhenat per kuizin ',
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : null,
                 ),
                 Container(
-                    margin: const EdgeInsets.only(
-                      top: 20,
-                      bottom: 40,
-                      left: 230,
-                    ),
-                    width: 110,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Get.theme.primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextButton(
-                      child: const Text(
-                        'Krijo pytjen',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                  width: double.infinity,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Get.theme.primaryColor,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: TextButton(
                       onPressed: () {
-                        quizPaperController.idOfQuestion++;
-                        quizPaperController.saveQuestionId();
-                        quizPaperController.createQuestion(
-                          id: quizPaperController.idOfQuestion.toString(),
-                          correctAnswer: quizPaperController
-                              .fifthCorrectAnswer.value.text
-                              .toUpperCase(),
-                          question: quizPaperController
-                              .fifthQuestionController.value.text,
-                        );
-                        quizPaperController.createAnswerA(
-                            answer: quizPaperController
-                                .fifthAnswerControllerA.value.text,
-                            identifier: quizPaperController
-                                        .fifthAnswerControllerA.value.text ==
-                                    quizPaperController
-                                        .fifthAnswerControllerA.value.text
-                                ? 'A'
-                                : 'j');
-                        quizPaperController.createAnswerB(
-                            answer: quizPaperController
-                                .fifthAnswerControllerB.value.text,
-                            identifier: quizPaperController
-                                        .fifthAnswerControllerB.value.text ==
-                                    quizPaperController
-                                        .fifthAnswerControllerB.value.text
-                                ? 'B'
-                                : 'j');
-                        quizPaperController.createAnswerC(
-                            answer: quizPaperController
-                                .fifthAnswerControllerC.value.text,
-                            identifier: quizPaperController
-                                        .fifthAnswerControllerC.value.text ==
-                                    quizPaperController
-                                        .fifthAnswerControllerC.value.text
-                                ? 'C'
-                                : 'j');
-                        quizPaperController.createAnswerD(
-                            answer: quizPaperController
-                                .fifthAnswerControllerD.value.text,
-                            identifier: quizPaperController
-                                        .fifthAnswerControllerD.value.text ==
-                                    quizPaperController
-                                        .fifthAnswerControllerD.value.text
-                                ? 'D'
-                                : 'j');
-                        // quizPaperController.createAnswers();
+                        if (createQuizController.firstQuestionCreated.value &&
+                            createQuizController.secondQuestionCreated.value &&
+                            createQuizController.thirdQuestionCreated.value &&
+                            createQuizController.fourthQuestionCreated.value &&
+                            createQuizController.fifthQuestionCreated.value) {
+                          createQuizController.navigateToHomePage();
+                        } else {
+                          createQuizController.allQuizPaperCreated.value = true;
+                        }
                       },
-                    )),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text(
+                            'Perfundo',
+                            style: TextStyle(
+                              fontFamily: 'WorkSans',
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.normal,
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
               ],
             )),
           ),

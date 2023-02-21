@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_study_app/configs/themes/app_colors.dart';
 import 'package:flutter_study_app/controllers/auth_controller.dart';
 import 'package:flutter_study_app/controllers/zoom_drawer_controller.dart';
+import 'package:flutter_study_app/widgets/contact_us/contact_us_widget.dart';
 import 'package:flutter_study_app/widgets/drawerButtonWidget.dart';
 import 'package:get/get.dart';
 
@@ -56,16 +57,18 @@ class MenuScreen extends GetView<MyZoomDraweController> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 10.0,
-                                ),
-                                child: Text(
-                                  controller.user.value!.displayName ?? '',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 17,
-                                      color: onSurfaceTextColor),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 10.0,
+                                  ),
+                                  child: Text(
+                                    controller.user.value!.displayName ?? '',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 17,
+                                        color: onSurfaceTextColor),
+                                  ),
                                 ),
                               ),
                             ],
@@ -73,6 +76,16 @@ class MenuScreen extends GetView<MyZoomDraweController> {
                         )),
                   const Spacer(
                     flex: 2,
+                  ),
+                  Transform.translate(
+                    offset: const Offset(9, -7),
+                    child: DrawerButton(
+                      icon: Icons.contact_mail,
+                      label: "Contact Us",
+                      onPressed: () => Get.bottomSheet(
+                        ContactUsWidget(),
+                      ),
+                    ),
                   ),
                   DrawerButton(
                     icon: Icons.facebook,
@@ -91,12 +104,13 @@ class MenuScreen extends GetView<MyZoomDraweController> {
                     flex: 4,
                   ),
                   DrawerButton(
-                    icon: Icons.logout,
-                    label: controller.user.value == null ? 'Kyçu' : "Dil",
-                    onPressed: () => controller.user.value == null
-                        ? authController.navigateToLoginPage()
-                        : controller.signOut(),
-                  )
+                      icon: Icons.logout,
+                      label: controller.user.value == null ? 'Kyçu' : "Dil",
+                      onPressed: () {
+                        controller.user.value == null
+                            ? authController.navigateToLoginPage()
+                            : controller.signOut();
+                      })
                 ],
               ),
             )
