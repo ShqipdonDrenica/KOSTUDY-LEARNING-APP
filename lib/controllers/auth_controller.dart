@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_study_app/firebase_ref/references.dart';
-import 'package:flutter_study_app/models/question_paper_model.dart';
 import 'package:flutter_study_app/screens/home/home_screen.dart';
 import 'package:flutter_study_app/screens/login/login_screen.dart';
 import 'package:flutter_study_app/widgets/dialogs/dialog_widget.dart';
@@ -15,23 +13,6 @@ class AuthController extends GetxController {
   late FirebaseAuth _auth;
   final _user = Rxn<User>();
   late Stream<User?> _authStateChanges;
-
-  Future<int?> checkRole() async {
-    DocumentSnapshot userDoc =
-        await fireStore.collection("users").doc(_user.value!.email).get();
-    UserModel userModel =
-        UserModel.fromJson(userDoc.data as Map<String, dynamic>);
-    if (userModel.role == 1) {
-      if (kDebugMode) {
-        print('Admin');
-      }
-    } else if (userModel.role == 0) {
-      if (kDebugMode) {
-        print('Super admin');
-      }
-    }
-    return null;
-  }
 
   void initAuth() async {
     await Future.delayed(const Duration(seconds: 2));

@@ -12,6 +12,7 @@ class MenuScreen extends GetView<MyZoomDraweController> {
   MenuScreen({super.key});
 
   AuthController authController = Get.put<AuthController>(AuthController());
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,7 +36,7 @@ class MenuScreen extends GetView<MyZoomDraweController> {
               padding: EdgeInsets.only(right: Get.width * 0.42),
               child: Column(
                 children: [
-                  Obx(() => controller.user.value == null
+                  controller.getUser() == null
                       ? const Padding(
                           padding: EdgeInsets.only(left: 28.0, top: 10),
                           child: Text(
@@ -73,7 +74,7 @@ class MenuScreen extends GetView<MyZoomDraweController> {
                               ),
                             ],
                           ),
-                        )),
+                        ),
                   const Spacer(
                     flex: 2,
                   ),

@@ -352,9 +352,9 @@ class CreateQuizController extends GetxController {
   // }
   Future<int?> getUserRole(String? email) async {
     if (email == null) return null;
-    final FirebaseFirestore _db = FirebaseFirestore.instance;
+    final FirebaseFirestore db = FirebaseFirestore.instance;
     var snapshot =
-        await _db.collection("users").where("email", isEqualTo: email).get();
+        await db.collection("users").where("email", isEqualTo: email).get();
     if (snapshot.docs.isEmpty) return null;
     int role = snapshot.docs.first.data()['role'];
     return role;

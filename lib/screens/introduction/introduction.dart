@@ -8,6 +8,7 @@ import 'package:flutter_study_app/widgets/app_circle_button_widget.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+// ignore: must_be_immutable
 class AppIntroductionScreen extends StatelessWidget {
   AppIntroductionScreen({super.key});
   MyZoomDraweController myZoomDraweController =

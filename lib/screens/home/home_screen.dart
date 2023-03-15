@@ -54,10 +54,13 @@ class HomeScreen extends GetView<MyZoomDraweController> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          AppCircleButtonWidget(
+                          GestureDetector(
+                            behavior: HitTestBehavior.translucent,
                             onTap: controller.toogleDrawer,
-                            child: const Icon(
-                              AppIcons.menuLeft,
+                            child: const AppCircleButtonWidget(
+                              child: Icon(
+                                AppIcons.menuLeft,
+                              ),
                             ),
                           ),
                           const SizedBox(

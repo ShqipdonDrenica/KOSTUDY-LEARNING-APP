@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_study_app/controllers/auth_controller.dart';
 import 'package:flutter_study_app/controllers/create_quiz_controller.dart';
-import 'package:flutter_study_app/screens/introduction/introduction.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,8 +10,8 @@ class MyZoomDraweController extends GetxController {
   CreateQuizController createQuizController =
       Get.put<CreateQuizController>(CreateQuizController());
   final controller = Get.put<AuthController>(AuthController());
-  Rx<User?> user = Rxn();
-
+  final user = Rxn<User>();
+  late final FirebaseAuth _auth = FirebaseAuth.instance;
   void toogleDrawer() {
     zoomDrawerController.toggle?.call();
     update();
@@ -22,7 +21,6 @@ class MyZoomDraweController extends GetxController {
     Get.find<AuthController>().signOut();
   }
 
-  void singIn() {}
   void website() {
     _launch("https://www.ubt-uni.net/");
   }
@@ -46,30 +44,14 @@ class MyZoomDraweController extends GetxController {
     }
   }
 
-  // isAdmin() async {
-  //   if (user.value!.email != null) {
-  //     if (user.value!.email == 'shqipdondrenica@gmail.com') {
-  //       return true;
-  //     }
-  //   } else {
-  //     return;
-  //   }
-  // }
-
-  checkRole() {
-    if (user.value != null && user.value?.email != null) {
-      // ignore: unrelated_type_equality_checks
-      if (createQuizController.getUserRole(user.value!.email!) == 0) {
-        return 'admin';
-      } else {
-        return 'user';
-      }
-    }
+  User? getUser() {
+    user.value = _auth.currentUser;
+    return user.value;
   }
 
   @override
   void onReady() {
-    user.value = Get.find<AuthController>().getUser();
+    getUser();
     super.onReady();
   }
 }

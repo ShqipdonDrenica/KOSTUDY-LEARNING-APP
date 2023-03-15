@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_study_app/controllers/edit_quiz_controller.dart';
 import 'package:flutter_study_app/widgets/text_form_field_widget.dart';
@@ -334,7 +336,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                       bottom: 40,
                       left: 230,
                     ),
-                    width: 110,
+                    width: 200,
                     height: 50,
                     decoration: BoxDecoration(
                       color: Get.theme.primaryColor,
@@ -465,7 +467,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                       bottom: 40,
                       left: 230,
                     ),
-                    width: 110,
+                    width: 200,
                     height: 50,
                     decoration: BoxDecoration(
                       color: Get.theme.primaryColor,
@@ -473,7 +475,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                     ),
                     child: TextButton(
                       child: const Text(
-                        'redakto pytjen',
+                        'Redakto pytjen',
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
@@ -596,7 +598,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                       bottom: 40,
                       left: 230,
                     ),
-                    width: 110,
+                    width: 200,
                     height: 50,
                     decoration: BoxDecoration(
                       color: Get.theme.primaryColor,
@@ -604,7 +606,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                     ),
                     child: TextButton(
                       child: const Text(
-                        'redakto pytjen',
+                        'Redakto pytjen',
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
@@ -727,7 +729,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                       bottom: 40,
                       left: 230,
                     ),
-                    width: 110,
+                    width: 200,
                     height: 50,
                     decoration: BoxDecoration(
                       color: Get.theme.primaryColor,
@@ -735,7 +737,7 @@ class BottomSheetEditWidget extends StatelessWidget {
                     ),
                     child: TextButton(
                       child: const Text(
-                        'redakto pytjen',
+                        'Redakto pytjen',
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {

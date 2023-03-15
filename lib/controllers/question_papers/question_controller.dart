@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_study_app/controllers/auth_controller.dart';
 import 'package:flutter_study_app/controllers/quiz_paper_controller.dart';
 import 'package:flutter_study_app/firebase_ref/loading_status.dart';
 import 'package:flutter_study_app/firebase_ref/references.dart';
 import 'package:flutter_study_app/models/question_paper_model.dart';
 import 'package:flutter_study_app/screens/home/home_screen.dart';
+import 'package:flutter_study_app/screens/home/user_home_screen.dart';
 import 'package:flutter_study_app/screens/result_screen.dart';
 import 'package:get/get.dart';
 
@@ -48,9 +51,25 @@ class QuestionController extends GetxController {
   }
 
   //restart in the begining
-  navigateToHome() {
+  navigateToHome() async {
     _timer!.cancel();
-    return Get.offAllNamed(HomeScreen.routeName);
+    User? user = Get.find<AuthController>().getUser();
+
+    // Get the user's role from Firebase
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.email)
+        .get();
+    Map<dynamic, dynamic> userData = userDoc.data() as Map<dynamic,
+        dynamic>; // Cast the return value of data() to Map<String, dynamic>
+    int userRole = userData["role"]
+        as int; // Access the "role" field using the [] operator and cast the value to int
+
+    if (userRole == 1) {
+      return Get.offAll(() => HomeScreen());
+    } else {
+      return Get.offAll(() => UserHomeScreen());
+    }
   }
 
   Rxn<Questions> currentQuestion = Rxn<Questions>();

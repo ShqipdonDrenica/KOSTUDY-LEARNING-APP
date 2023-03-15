@@ -3,7 +3,6 @@ import 'package:flutter_study_app/configs/themes/app_icons.dart';
 import 'package:flutter_study_app/configs/themes/costum_text_styles.dart';
 import 'package:flutter_study_app/configs/themes/ui_parameters.dart';
 import 'package:flutter_study_app/screens/questions/test_overview_screen.dart';
-import 'package:flutter_study_app/widgets/app_circle_button_widget.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
@@ -52,10 +51,21 @@ class CustomAppBarWidget extends StatelessWidget
               if (showActionIcon)
                 Transform.translate(
                   offset: const Offset(10, 0),
-                  child: AppCircleButtonWidget(
-                      onTap: onMenuActionTap ??
-                          () => Get.to(() => const TestOverviewScreen()),
-                      child: const Icon(AppIcons.menu)),
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    child: SizedBox(
+                      width: 56.0,
+                      height: 56.0,
+                      child: Ink(
+                        child: IconButton(
+                          onPressed: onMenuActionTap ??
+                              () => Get.to(() => const TestOverviewScreen()),
+                          icon: const Icon(AppIcons.menu),
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
                 )
             ],
           )
