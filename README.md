@@ -1,4 +1,4 @@
-# flutter_study_app
+# KOSTUDY LEARNING APP
 
 A new Flutter project.
 
@@ -11,6 +11,13 @@ A few resources to get you started if this is your first Flutter project:
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+https://github.com/ShqipdonDrenica/FlutterStudyApp/assets/63073692/1f244e45-8778-45d5-adf7-36d27026f98a
+
+https://github.com/ShqipdonDrenica/FlutterStudyApp/assets/63073692/5b5901b7-0979-4d27-bbf6-852340b49bb4
+
+https://github.com/ShqipdonDrenica/FlutterStudyApp/assets/63073692/55d369a6-709d-475a-94ac-f5b03c1c1692
+
+https://github.com/ShqipdonDrenica/FlutterStudyApp/assets/63073692/444b407c-dfd8-4024-9d52-0c8adff96637
+
+
+
