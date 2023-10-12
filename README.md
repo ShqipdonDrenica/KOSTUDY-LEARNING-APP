@@ -1,4 +1,4 @@
-# flutter_study_app
+# KOSTUDY LEARNING APP
 
 A new Flutter project.
 
