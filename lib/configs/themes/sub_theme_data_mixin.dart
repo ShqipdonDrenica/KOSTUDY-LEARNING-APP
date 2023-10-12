@@ -9,6 +9,7 @@ mixin SubThemeData {
         bodyText1: TextStyle(
           fontWeight: FontWeight.w400,
         ),
+        // ignore: deprecated_member_use
         bodyText2: TextStyle(fontWeight: FontWeight.w400),
       ),
     );

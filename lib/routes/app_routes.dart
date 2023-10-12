@@ -6,7 +6,8 @@ import 'package:flutter_study_app/screens/login/login_screen.dart';
 import 'package:flutter_study_app/screens/questions/questions_screen.dart';
 import 'package:flutter_study_app/screens/questions/test_overview_screen.dart';
 import 'package:flutter_study_app/screens/splash/splash_screen.dart';
-import 'package:flutter_zoom_drawer/config.dart';
+
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 
 class AppRoutes {

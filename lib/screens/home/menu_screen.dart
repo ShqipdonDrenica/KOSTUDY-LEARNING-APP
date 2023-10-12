@@ -78,40 +78,51 @@ class MenuScreen extends GetView<MyZoomDraweController> {
                   const Spacer(
                     flex: 2,
                   ),
-                  Transform.translate(
-                    offset: const Offset(9, -7),
-                    child: DrawerButton(
-                      icon: Icons.contact_mail,
-                      label: "Contact Us",
-                      onPressed: () => Get.bottomSheet(
-                        ContactUsWidget(),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.contact_mail),
+                        onPressed: () => Get.bottomSheet(
+                          ContactUsWidget(),
+                        ),
                       ),
-                    ),
+                      const Text(
+                        'Contact Us',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
                   ),
-                  DrawerButton(
-                    icon: Icons.facebook,
-                    label: "facebook",
-                    onPressed: () => controller.facebook(),
-                  ),
-                  Transform.translate(
-                    offset: const Offset(-7, 12),
-                    child: DrawerButton(
-                      icon: Icons.web,
-                      label: "website",
-                      onPressed: () => controller.website(),
-                    ),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          controller.facebook();
+                        },
+                        icon: const Icon(Icons.facebook),
+                      ),
+                      const Text(
+                        'Facebook',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
                   ),
                   const Spacer(
                     flex: 4,
                   ),
-                  DrawerButton(
-                      icon: Icons.logout,
-                      label: controller.user.value == null ? 'Kyçu' : "Dil",
-                      onPressed: () {
-                        controller.user.value == null
-                            ? authController.navigateToLoginPage()
-                            : controller.signOut();
-                      })
+                  Row(
+                    children: [
+                      IconButton(
+                          icon: const Icon(Icons.logout),
+                          onPressed: () {
+                            controller.user.value == null
+                                ? authController.navigateToLoginPage()
+                                : controller.signOut();
+                          }),
+                      Text(
+                        controller.user.value == null ? 'Kyçu' : "Dil",
+                      ),
+                    ],
+                  )
                 ],
               ),
             )

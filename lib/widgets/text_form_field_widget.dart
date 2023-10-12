@@ -49,7 +49,7 @@ class TextFormFieldWidget extends StatelessWidget {
                 ),
         ),
         hintText: hintText,
-        hintStyle: theme.bodyText2!.copyWith(
+        hintStyle: theme.bodyMedium!.copyWith(
           fontFamily: 'Avenir',
           fontSize: 14,
           color: Colors.black54,

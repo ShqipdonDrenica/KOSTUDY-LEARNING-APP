@@ -10,7 +10,7 @@ import 'package:flutter_study_app/screens/home/menu_screen.dart';
 import 'package:flutter_study_app/screens/home/user_question_card_screen.dart';
 import 'package:flutter_study_app/widgets/app_circle_button_widget.dart';
 import 'package:flutter_study_app/widgets/content_area_widget.dart';
-import 'package:flutter_zoom_drawer/config.dart';
+
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 

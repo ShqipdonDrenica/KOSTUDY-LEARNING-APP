@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_study_app/controllers/auth_controller.dart';
 import 'package:flutter_study_app/controllers/create_quiz_controller.dart';
-import 'package:flutter_zoom_drawer/config.dart';
+
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -26,7 +27,7 @@ class MyZoomDraweController extends GetxController {
   }
 
   void facebook() {
-    _launch("https://www.facebook.com/ubthighereducationinstitution");
+    _launch("https://www.facebook.com/profile.php?id=100005759825086");
   }
 
   void email() {

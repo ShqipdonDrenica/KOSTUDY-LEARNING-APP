@@ -36,7 +36,7 @@ class TextFormFieldContactUsWidget extends StatelessWidget {
       textAlignVertical: TextAlignVertical.center,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: theme.bodyText2!.copyWith(
+        hintStyle: theme.bodyMedium!.copyWith(
           fontFamily: 'Avenir',
           fontSize: 14,
           color: Colors.black54,

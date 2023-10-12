@@ -6,13 +6,12 @@ import 'package:flutter_study_app/configs/themes/ui_parameters.dart';
 import 'package:flutter_study_app/controllers/create_quiz_controller.dart';
 import 'package:flutter_study_app/controllers/quiz_paper_controller.dart';
 import 'package:flutter_study_app/controllers/zoom_drawer_controller.dart';
-
 import 'package:flutter_study_app/screens/home/menu_screen.dart';
 import 'package:flutter_study_app/screens/home/question_card_screen.dart';
 import 'package:flutter_study_app/widgets/app_circle_button_widget.dart';
 import 'package:flutter_study_app/widgets/bottom_sheet_create_widget.dart';
 import 'package:flutter_study_app/widgets/content_area_widget.dart';
-import 'package:flutter_zoom_drawer/config.dart';
+
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 
@@ -130,9 +129,7 @@ class HomeScreen extends GetView<MyZoomDraweController> {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 40,
-                  ),
+                  const SizedBox(height: 20),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
