@@ -120,6 +120,7 @@ class MenuScreen extends GetView<MyZoomDraweController> {
                           }),
                       Text(
                         controller.user.value == null ? 'Kyçu' : "Dil",
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ],
                   )
